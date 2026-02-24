@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
-import { sneakers } from '@/app/lib/sneakerData';
+import connectDB from '@/app/lib/mongodb';
+import Sneaker from '@/app/lib/models/Sneaker';
 
-// Module-level constant — built once, never rebuilt per-request
+// Search aliases — built once at module level, never rebuilt per-request
 const SEARCH_ALIASES: Record<string, string[]> = {
   // Jordan series
   'aj1':          ['air jordan 1', 'jordan 1'],
@@ -56,92 +57,84 @@ const SEARCH_ALIASES: Record<string, string[]> = {
   'on cloud':     ['on running'],
 };
 
-// Deterministic shuffle — same seed always produces same order (for stable pagination)
-function seededShuffle<T>(arr: T[], seed: number): T[] {
-  const result = [...arr];
-  let s = seed;
-  for (let i = result.length - 1; i > 0; i--) {
-    s = (s * 1664525 + 1013904223) & 0x7fffffff;
-    const j = Math.abs(s) % (i + 1);
-    [result[i], result[j]] = [result[j], result[i]];
-  }
-  return result;
-}
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  
-  // 1. GET PARAMETERS FROM URL
-  const query = searchParams.get('q')?.toLowerCase() || '';
-  const sort = searchParams.get('sort') || 'none';
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = 24;
-  
-  const id = searchParams.get('id');
-  const random = searchParams.get('random');
-  
-  // --- NEW: GRAB THE FILTERS ---
-  const priceMax = searchParams.get('price');
-  const priceMin = parseInt(searchParams.get('priceMin') || '0');
-  const brandsParam = searchParams.get('brands');
-  const seed = parseInt(searchParams.get('seed') || '0');
 
-  // 2. SPECIAL MODES (Random / ID)
+  const query      = searchParams.get('q')?.toLowerCase() || '';
+  const sort       = searchParams.get('sort') || 'none';
+  const page       = parseInt(searchParams.get('page') || '1');
+  const limit      = 24;
+  const id         = searchParams.get('id');
+  const random     = searchParams.get('random');
+  const priceMax   = searchParams.get('price') || searchParams.get('maxPrice');
+  const priceMin   = parseInt(searchParams.get('priceMin') || '0');
+  const brandsParam = searchParams.get('brands') || searchParams.get('brand');
+
+  await connectDB();
+
+  // --- RANDOM MODE ---
   if (random === 'true') {
-    const randomSneaker = sneakers[Math.floor(Math.random() * sneakers.length)];
-    return NextResponse.json([randomSneaker]);
+    const [randomSneaker] = await Sneaker.aggregate([{ $sample: { size: 1 } }]);
+    return NextResponse.json(randomSneaker ? [randomSneaker] : []);
   }
 
+  // --- ID LOOKUP ---
   if (id) {
-    const specificSneaker = sneakers.find((s) => s._id === id);
-    return NextResponse.json(specificSneaker ? [specificSneaker] : []);
+    const sneaker = await Sneaker.findById(id).lean();
+    return NextResponse.json(sneaker ? [sneaker] : []);
   }
 
-  // 3. SEARCH ALIAS EXPANSION — uses module-level SEARCH_ALIASES constant
-  const searchTerms: string[] = query ? [query, ...(SEARCH_ALIASES[query] ?? [])] : [];
+  // --- BUILD MONGO QUERY ---
+  const conditions: object[] = [];
 
-  // Hoist computed values out of the filter loop (avoid re-computing per sneaker)
-  const priceMaxInt = priceMax ? parseInt(priceMax) : null;
-  const brandsArr = brandsParam ? brandsParam.split(',') : null;
+  // A. Text search — query + aliases, any term matches shoeName or brand
+  if (query) {
+    const searchTerms = [query, ...(SEARCH_ALIASES[query] ?? [])];
+    const orClauses = searchTerms.flatMap((term) => [
+      { shoeName: { $regex: term, $options: 'i' } },
+      { brand:    { $regex: term, $options: 'i' } },
+    ]);
+    conditions.push({ $or: orClauses });
+  }
 
-  // 4. FILTERING LOGIC
-  let filtered = sneakers.filter((sneaker) => {
-    // A. Text Search — matches name or brand against any expanded search term
-    const matchesSearch =
-      searchTerms.length === 0 ||
-      searchTerms.some(term =>
-        sneaker.shoeName.toLowerCase().includes(term) ||
-        sneaker.brand.toLowerCase().includes(term)
-      );
+  // B. Price filter
+  if (priceMin > 0 || priceMax) {
+    const priceFilter: Record<string, number> = {};
+    if (priceMin > 0) priceFilter.$gte = priceMin;
+    if (priceMax)     priceFilter.$lte = parseInt(priceMax);
+    conditions.push({ retailPrice: priceFilter });
+  }
 
-    // B. Price Filter — min and max bucket support
-    const matchesPrice =
-      sneaker.retailPrice >= priceMin &&
-      (priceMaxInt !== null ? sneaker.retailPrice <= priceMaxInt : true);
+  // C. Brand filter
+  if (brandsParam) {
+    const brands = brandsParam.split(',');
+    const brandClauses = brands.flatMap((b) => [
+      { brand:    { $regex: b.trim(), $options: 'i' } },
+      { shoeName: { $regex: b.trim(), $options: 'i' } },
+    ]);
+    conditions.push({ $or: brandClauses });
+  }
 
-    // C. Brand Filter
-    const matchesBrand =
-      brandsArr === null ||
-      brandsArr.some(b =>
-        sneaker.brand.toLowerCase().includes(b.toLowerCase()) ||
-        sneaker.shoeName.toLowerCase().includes(b.toLowerCase())
-      );
+  const mongoQuery = conditions.length > 0 ? { $and: conditions } : {};
 
-    return matchesSearch && matchesPrice && matchesBrand;
-  });
+  // --- SORT ---
+  let sortObj: Record<string, 1 | -1> = { _id: 1 }; // stable default
+  if (sort === 'price-asc')  sortObj = { retailPrice:  1 };
+  if (sort === 'price-desc') sortObj = { retailPrice: -1 };
+  if (sort === 'name-asc')   sortObj = { shoeName:     1 };
+  if (sort === 'name-desc')  sortObj = { shoeName:    -1 };
 
-  // 5. SORTING — shuffle with session seed when no explicit sort is chosen
-  if (sort === 'price-asc') filtered.sort((a, b) => a.retailPrice - b.retailPrice);
-  else if (sort === 'price-desc') filtered.sort((a, b) => b.retailPrice - a.retailPrice);
-  else if (sort === 'name-asc') filtered.sort((a, b) => a.shoeName.localeCompare(b.shoeName));
-  else if (sort === 'name-desc') filtered.sort((a, b) => b.shoeName.localeCompare(a.shoeName));
-  else if (seed) filtered = seededShuffle(filtered, seed);
+  // --- PAGINATE ---
+  const [totalItems, paginatedData] = await Promise.all([
+    Sneaker.countDocuments(mongoQuery),
+    Sneaker.find(mongoQuery)
+      .sort(sortObj)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean(),
+  ]);
 
-  // 6. PAGINATION
-  const totalItems = filtered.length;
   const totalPages = Math.ceil(totalItems / limit);
-  const startIndex = (page - 1) * limit;
-  const paginatedData = filtered.slice(startIndex, startIndex + limit);
 
   return NextResponse.json(
     { data: paginatedData, pagination: { totalPages, totalItems, currentPage: page } },
