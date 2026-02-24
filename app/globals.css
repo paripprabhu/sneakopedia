@@ -12,3 +12,20 @@ body {
   color: rgb(var(--foreground-rgb));
   background: black;
 }
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 30s linear infinite; }
+
+@keyframes holo {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.holo-border {
+  background: linear-gradient(270deg, #333, #555, #3b82f6, #fff, #333);
+  background-size: 400% 400%;
+  animation: holo 3s ease infinite;
+}

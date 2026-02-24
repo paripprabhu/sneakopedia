@@ -27,6 +27,9 @@ const SneakerSchema = new Schema<ISneaker>(
   { timestamps: false }
 );
 
+// Compound index for regex text search on shoeName + brand
+SneakerSchema.index({ shoeName: 1, brand: 1 });
+
 const Sneaker =
   (mongoose.models.Sneaker as mongoose.Model<ISneaker>) ||
   mongoose.model<ISneaker>('Sneaker', SneakerSchema);

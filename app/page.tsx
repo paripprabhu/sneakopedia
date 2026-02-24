@@ -111,108 +111,7 @@ const getLinks = (sneakerName: string, brand: string, size?: string) => {
 };
 
 // ============================================================================
-// COMPONENT 1: IDLE SCREENSAVER (DVD LOGO STYLE)
-// ============================================================================
-const IdleScreen = ({ theme }: { theme: string }) => {
-  const [position, setPosition] = useState({ x: 100, y: 100 });
-  const [velocity, setVelocity] = useState({ x: 2, y: 2 });
-  
-  // Dynamic color based on theme
-  const colorClass = `text-${theme}-500`;
-
-  useEffect(() => {
-    const move = setInterval(() => {
-      setPosition((prev) => {
-        const newX = prev.x + velocity.x;
-        const newY = prev.y + velocity.y;
-        let newVelX = velocity.x;
-        let newVelY = velocity.y;
-        let hit = false;
-
-        // Bounce X
-        if (newX <= 0 || newX >= window.innerWidth - 300) {
-          newVelX = -velocity.x;
-          hit = true;
-        }
-        // Bounce Y
-        if (newY <= 0 || newY >= window.innerHeight - 50) {
-          newVelY = -velocity.y;
-          hit = true;
-        }
-
-        if (hit) {
-          setVelocity({ x: newVelX, y: newVelY });
-        }
-        return { x: newX, y: newY };
-      });
-    }, 16); // 60fps
-
-    return () => clearInterval(move);
-  }, [velocity]);
-
-  return (
-    <div className="fixed inset-0 bg-black z-[100] cursor-none overflow-hidden flex items-center justify-center">
-      <div 
-        className={`absolute font-black text-6xl tracking-tighter uppercase ${colorClass}`}
-        style={{ left: position.x, top: position.y }}
-      >
-        SNEAKOPEDIA
-      </div>
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-zinc-800 font-mono text-xs animate-pulse">
-        {"/// SYSTEM_IDLE /// MOVE_MOUSE_TO_RESUME"}
-      </div>
-    </div>
-  );
-};
-
-// ============================================================================
-// COMPONENT 2: BOOT SEQUENCE (HACKER TERMINAL)
-// ============================================================================
-const BootScreen = ({ onComplete, theme }: { onComplete: () => void, theme: string }) => {
-  const [lines, setLines] = useState<string[]>([]);
-  
-  const bootText = [
-    "INITIALIZING KERNEL...",
-    "LOADING MEMORY MODULES... OK",
-    "MOUNTING SNEAKER_DB VOLUME...",
-    "ESTABLISHING SECURE CONNECTION...",
-    "BYPASSING PROXY FIREWALL...",
-    "FETCHING MARKET DATA...",
-    "RENDERING HOLOGRAPHIC ASSETS...",
-    "SYSTEM_ACCESS_GRANTED."
-  ];
-
-  useEffect(() => {
-    let delay = 0;
-    bootText.forEach((line, index) => {
-      delay += Math.random() * 300 + 100; // Random typing speed
-      setTimeout(() => {
-        setLines(prev => [...prev, line]);
-        // Finish when last line is done
-        if (index === bootText.length - 1) {
-           setTimeout(onComplete, 800);
-        }
-      }, delay);
-    });
-  }, []);
-
-  return (
-    <div className={`fixed inset-0 bg-black z-[100] flex flex-col justify-end p-10 font-mono text-xs md:text-sm text-${theme}-500 cursor-wait`}>
-       <div className="max-w-2xl w-full mx-auto space-y-1">
-         {lines.map((line, i) => (
-           <div key={i} className="flex gap-2">
-             <span className="text-zinc-600">[{new Date().toLocaleTimeString()}]</span>
-             <span className={i === lines.length - 1 ? "animate-pulse text-white" : `text-${theme}-400`}>{line}</span>
-           </div>
-         ))}
-         <div className={`h-4 w-3 bg-${theme}-500 animate-pulse mt-2`}></div>
-       </div>
-    </div>
-  );
-};
-
-// ============================================================================
-// COMPONENT 3: MAIN APP
+// MAIN APP
 // ============================================================================
 export default function Sneakopedia() {
   // --- STATE MANAGEMENT ---
@@ -239,18 +138,14 @@ export default function Sneakopedia() {
   const [selectedSneaker, setSelectedSneaker] = useState<any>(null);
   const [recentViewed, setRecentViewed] = useState<any[]>([]);
 
-  // Filter & Boot State
+  // Filter State
   const [showFilters, setShowFilters] = useState(false);
   const [showGrails, setShowGrails] = useState(false);
   const [priceRange, setPriceRange] = useState(300000);
   const [priceMin, setPriceMin] = useState(0);
   const [activeBucket, setActiveBucket] = useState('ALL');
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [showBoot, setShowBoot] = useState(true);
 
-  // Idle Timer State
-  const [isIdle, setIsIdle] = useState(false);
-  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<HTMLDivElement>(null);
 
@@ -474,37 +369,8 @@ export default function Sneakopedia() {
     link.click();
   };
 
-  // --- IDLE TIMER SYSTEM ---
-  const resetIdleTimer = () => {
-    setIsIdle(false);
-    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-    idleTimerRef.current = setTimeout(() => {
-      setIsIdle(true);
-    }, 60000); // 60 Seconds
-  };
-
-  useEffect(() => {
-    window.addEventListener('mousemove', resetIdleTimer);
-    window.addEventListener('keydown', resetIdleTimer);
-    window.addEventListener('scroll', resetIdleTimer);
-    
-    resetIdleTimer(); 
-
-    return () => {
-      window.removeEventListener('mousemove', resetIdleTimer);
-      window.removeEventListener('keydown', resetIdleTimer);
-      window.removeEventListener('scroll', resetIdleTimer);
-      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-    };
-  }, []);
-
   // --- INITIALIZATION & EFFECTS ---
   useEffect(() => {
-    const hasBooted = sessionStorage.getItem('sneakopedia_booted');
-    if (hasBooted) {
-      setShowBoot(false);
-    }
-    
     // Load History
     const saved = localStorage.getItem('sneakopedia_history');
     if (saved) {
@@ -558,11 +424,6 @@ export default function Sneakopedia() {
 
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  const handleBootComplete = () => {
-    sessionStorage.setItem('sneakopedia_booted', 'true');
-    setShowBoot(false);
-  };
 
   // --- URL SYNC & HISTORY ---
   useEffect(() => {
@@ -624,26 +485,17 @@ export default function Sneakopedia() {
     fetchSneakers();
   }, [fetchSneakers]);
 
-  // --- AUTOCOMPLETE FETCH ---
+  // --- AUTOCOMPLETE: derive from grid results (no extra API call) ---
   useEffect(() => {
     if (searchInput.trim().length < 2) {
       setSuggestions([]);
       setShowSuggestions(false);
       return;
     }
-    const timer = setTimeout(async () => {
-      try {
-        const res = await fetch(`/api/sneakers?q=${encodeURIComponent(searchInput.trim())}&page=1`);
-        const data = await res.json();
-        const results = (data.data || []).slice(0, 5);
-        setSuggestions(results);
-        setShowSuggestions(results.length > 0);
-      } catch {
-        setSuggestions([]);
-      }
-    }, 200);
-    return () => clearTimeout(timer);
-  }, [searchInput]);
+    const results = sneakers.slice(0, 5);
+    setSuggestions(results);
+    setShowSuggestions(results.length > 0);
+  }, [sneakers, searchInput]);
 
   // --- AUTOCOMPLETE CLICK-OUTSIDE ---
   useEffect(() => {
@@ -934,10 +786,6 @@ export default function Sneakopedia() {
       {/* TOP ACCENT BAR */}
       <div className="fixed top-0 left-0 right-0 h-[3px] z-[999] transition-colors duration-500" style={{ backgroundColor: hex }}></div>
 
-      {/* 1. OVERLAYS */}
-      {showBoot && <BootScreen onComplete={handleBootComplete} theme={theme} />}
-      {isIdle && !showBoot && <IdleScreen theme={theme} />}
-
       {/* MOBILE SIDEBAR BACKDROP */}
       {(showFilters || showGrails) && isMobile && (
         <div
@@ -946,25 +794,7 @@ export default function Sneakopedia() {
         />
       )}
 
-      {/* 2. GLOBAL STYLES (Dynamic Theme Injection) */}
-      <style jsx global>{`
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .animate-marquee { animation: marquee 30s linear infinite; }
-        
-        /* HOLOGRAPHIC SHIMMER */
-        @keyframes holo {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .holo-border {
-          background: linear-gradient(270deg, #333, #555, ${theme === 'blue' ? '#00f' : theme === 'emerald' ? '#0f0' : theme === 'amber' ? '#f59e0b' : '#ef4444'}, #fff, #333);
-          background-size: 400% 400%;
-          animation: holo 3s ease infinite;
-        }
-      `}</style>
-
-      {/* 3. BACKGROUND GRID */}
+      {/* BACKGROUND GRID */}
       <div
         className="fixed inset-0 pointer-events-none transition-all duration-500"
         style={{
@@ -974,7 +804,7 @@ export default function Sneakopedia() {
       />
 
       {/* 4. NAVBAR (FIXED TOP) */}
-      <nav className={`fixed top-0 w-full z-50 px-6 py-4 flex items-start justify-between bg-[#09090b]/80 backdrop-blur-sm border-b transition-all duration-500 ${showBoot ? 'opacity-0' : 'opacity-100'}`} style={{ borderBottomColor: `${hex}40` }}>
+      <nav className="fixed top-0 w-full z-50 px-6 py-4 flex items-start justify-between bg-[#09090b]/80 backdrop-blur-sm border-b transition-all duration-500" style={{ borderBottomColor: `${hex}40` }}>
         <div onClick={handleLogoClick} className="cursor-pointer group flex items-center gap-3 pt-1">
            <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: hex }}></div>
            <span className="font-mono text-xs font-bold tracking-widest uppercase transition-colors duration-300 group-hover:text-white" style={{ color: hex }}>
@@ -1190,7 +1020,7 @@ export default function Sneakopedia() {
 
       {/* 7. MAIN CONTENT AREA */}
       <main
-        className={`relative flex flex-col items-center justify-center min-h-screen px-4 py-32 z-10 transition-all duration-1000 ${showBoot ? 'opacity-0 blur-sm' : 'opacity-100 blur-0'}`}
+        className="relative flex flex-col items-center justify-center min-h-screen px-4 py-32 z-10"
         style={{
           paddingLeft:  (!isMobile && showFilters) ? '320px' : '1rem',
           paddingRight: (!isMobile && showGrails)  ? '320px' : '1rem',
