@@ -29820,7 +29820,7 @@ export const sneakers = [
     _id: "bacca_bucci_ironman",
     shoeName: "Bacca Bucci Ironman",
     brand: "Bacca Bucci",
-    retailPrice: 14999,
+    retailPrice: 1499,
     currency: "INR",
     thumbnail: "http://baccabucci.com/cdn/shop/products/3-IMG_8171_1_d72e2a11-f711-4106-b8a3-204e70f2727f.jpg?v=1768314972",
     description: ""
@@ -29829,7 +29829,7 @@ export const sneakers = [
     _id: "bacca_bucci_york",
     shoeName: "Bacca Bucci York",
     brand: "Bacca Bucci",
-    retailPrice: 14999,
+    retailPrice: 1499,
     currency: "INR",
     thumbnail: "http://baccabucci.com/cdn/shop/products/02_3_3c29af60-7058-4200-8987-e16b69922126.jpg?v=1635936817",
     description: ""
@@ -29838,7 +29838,7 @@ export const sneakers = [
     _id: "bacca_bucci_victoria_formal_shoes_with_s",
     shoeName: "Bacca Bucci VICTORIA Formal Shoes with Superior Comfort | All Day Wear Office Or Party Lace-up Shoes",
     brand: "Bacca Bucci",
-    retailPrice: 11999,
+    retailPrice: 1199,
     currency: "INR",
     thumbnail: "http://baccabucci.com/cdn/shop/products/MG_7666-min_1e99cd5a-e357-41a4-8048-56df9c9b30cc.jpg?v=1681747325",
     description: ""
@@ -29847,7 +29847,7 @@ export const sneakers = [
     _id: "bacca_bucci_viking",
     shoeName: "Bacca Bucci Viking",
     brand: "Bacca Bucci",
-    retailPrice: 8999,
+    retailPrice: 1599,
     currency: "INR",
     thumbnail: "http://baccabucci.com/cdn/shop/products/02-IMG_9938_1_-min_37ad63ac-cf9c-4a36-a96c-f0e52dd8c64b.jpg?v=1681379400",
     description: ""
@@ -29865,7 +29865,7 @@ export const sneakers = [
     _id: "bacca_bucci_punisher",
     shoeName: "Bacca Bucci PUNISHER",
     brand: "Bacca Bucci",
-    retailPrice: 14999,
+    retailPrice: 1499,
     currency: "INR",
     thumbnail: "http://baccabucci.com/cdn/shop/files/IMG_0836-_1_-min_b65055bd-a8ab-4309-8b4d-7df07b63a9ef.jpg?v=1699007643",
     description: ""
@@ -29874,7 +29874,7 @@ export const sneakers = [
     _id: "bacca_bucci_ikatron__sports_shoes_with_d",
     shoeName: "Bacca Bucci IKATRON – Sports Shoes with Dual-Density Sole",
     brand: "Bacca Bucci",
-    retailPrice: 14999,
+    retailPrice: 1499,
     currency: "INR",
     thumbnail: "http://baccabucci.com/cdn/shop/files/02_1_dd0a558e-9dcb-4662-a588-db907c037770.jpg?v=1768994494",
     description: ""
@@ -29883,7 +29883,7 @@ export const sneakers = [
     _id: "bacca_bucci_floatsultra_lightweight_eva_",
     shoeName: "Bacca Bucci Floats—Ultra Lightweight EVA Slides for Men",
     brand: "Bacca Bucci",
-    retailPrice: 14999,
+    retailPrice: 1499,
     currency: "INR",
     thumbnail: "http://baccabucci.com/cdn/shop/files/MG_6635.jpg?v=1755518572",
     description: ""
@@ -29892,7 +29892,7 @@ export const sneakers = [
     _id: "bacca_bucci_x_house_of_the_dragon_sneake",
     shoeName: "Bacca Bucci x House of the Dragon Sneakers",
     brand: "Bacca Bucci",
-    retailPrice: 8999,
+    retailPrice: 1999,
     currency: "INR",
     thumbnail: "http://baccabucci.com/cdn/shop/files/generated-image-1763042090877.jpg?v=1763104290",
     description: ""
@@ -29910,7 +29910,7 @@ export const sneakers = [
     _id: "bacca_bucci_moscow",
     shoeName: "Bacca Bucci Moscow",
     brand: "Bacca Bucci",
-    retailPrice: 8999,
+    retailPrice: 1999,
     currency: "INR",
     thumbnail: "http://baccabucci.com/cdn/shop/products/05-IMG_8129_1_-min.jpg?v=1662346840",
     description: ""
@@ -29919,7 +29919,7 @@ export const sneakers = [
     _id: "bacca_bucci_meteor",
     shoeName: "Bacca Bucci Meteor",
     brand: "Bacca Bucci",
-    retailPrice: 14999,
+    retailPrice: 1499,
     currency: "INR",
     thumbnail: "http://baccabucci.com/cdn/shop/products/05IMG_8084_3_-min_403c670f-cf87-473e-b6c6-8d18e1d78159.jpg?v=1669467261",
     description: ""
@@ -29928,7 +29928,7 @@ export const sneakers = [
     _id: "bacca_bucci_stalk",
     shoeName: "Bacca Bucci STALK",
     brand: "Bacca Bucci",
-    retailPrice: 11999,
+    retailPrice: 1199,
     currency: "INR",
     thumbnail: "http://baccabucci.com/cdn/shop/files/IMG_0617-_1_-min_9a1f84d6-3897-4850-8602-b69dde06e160.jpg?v=1699100461",
     description: ""
@@ -29937,7 +29937,7 @@ export const sneakers = [
     _id: "bacca_bucci_wager",
     shoeName: "Bacca Bucci Wager",
     brand: "Bacca Bucci",
-    retailPrice: 11999,
+    retailPrice: 1199,
     currency: "INR",
     thumbnail: "http://baccabucci.com/cdn/shop/files/WAGER_WHITE_AND_NAVY_02.jpg?v=1763111285",
     description: ""
@@ -30153,7 +30153,7 @@ export const sneakers = [
     _id: "bacca_bucci_ultraforce_mid_top_athletic_",
     shoeName: "Bacca Bucci ULTRAFORCE Mid-top Athletic-Inspired Casual Shoes",
     brand: "Bacca Bucci",
-    retailPrice: 11999,
+    retailPrice: 1199,
     currency: "INR",
     thumbnail: "http://baccabucci.com/cdn/shop/products/MG_5170_a1be1b8b-4e9d-49f1-9855-2a6ae70ae421.jpg?v=1635512996",
     description: ""

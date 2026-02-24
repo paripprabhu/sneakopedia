@@ -122,6 +122,13 @@ def scrape_single_product(driver, url):
         if img_src and img_src.startswith("//"): img_src = "https:" + img_src
         if img_src and "?" in img_src: img_src = img_src.split("?")[0]
 
+        # Extract source domain for description
+        try:
+            from urllib.parse import urlparse
+            source_domain = urlparse(url).netloc.replace("www.", "")
+        except:
+            source_domain = url
+
         item = {
             "_id": f"s_{random.randint(10000,99999)}_{int(time.time())}",
             "shoeName": name,
@@ -129,7 +136,7 @@ def scrape_single_product(driver, url):
             "retailPrice": price,
             "thumbnail": img_src,
             "url": url,
-            "description": "Sourced from Crepdog Crew"
+            "description": f"Sourced from {source_domain}"
         }
 
         # Validate
