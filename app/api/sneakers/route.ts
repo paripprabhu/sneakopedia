@@ -118,7 +118,7 @@ export async function GET(request: Request) {
   const mongoQuery = conditions.length > 0 ? { $and: conditions } : {};
 
   // --- SORT ---
-  let sortObj: Record<string, 1 | -1> = { _id: 1 }; // stable default
+  let sortObj: Record<string, 1 | -1> = { rand: 1 }; // random-ish stable default
   if (sort === 'price-asc')  sortObj = { retailPrice:  1 };
   if (sort === 'price-desc') sortObj = { retailPrice: -1 };
   if (sort === 'name-asc')   sortObj = { shoeName:     1 };

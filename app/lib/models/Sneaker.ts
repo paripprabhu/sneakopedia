@@ -9,6 +9,7 @@ export interface ISneaker {
   thumbnail: string;
   description: string;
   url?: string;
+  rand?: number;
 }
 
 const SneakerSchema = new Schema<ISneaker>(
@@ -21,6 +22,7 @@ const SneakerSchema = new Schema<ISneaker>(
     thumbnail:   { type: String, default: '' },
     description: { type: String, default: '' },
     url:         { type: String, default: '' },
+    rand:        { type: Number, default: () => Math.random(), index: true },
   },
   { timestamps: false }
 );

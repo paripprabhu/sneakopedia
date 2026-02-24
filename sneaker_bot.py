@@ -1,5 +1,6 @@
 import time
 import json
+import os
 import re
 import random
 from selenium import webdriver
@@ -10,6 +11,20 @@ from selenium.webdriver.common.by import By
 # 1. CONFIGURATION
 # ==========================================
 OUTPUT_FILE = "sneaker_dump.txt"
+MONGODB_URI = os.environ.get("MONGODB_URI", "")
+
+# MongoDB client — set up once if URI is available
+mongo_col = None
+try:
+    from pymongo import MongoClient, UpdateOne
+    if MONGODB_URI:
+        _client = MongoClient(MONGODB_URI)
+        mongo_col = _client["test"]["sneakers"]  # same db/collection as the app
+        print(f"✅ MongoDB connected.")
+    else:
+        print("⚠️  MONGODB_URI not set — will save to file only.")
+except ImportError:
+    print("⚠️  pymongo not installed (pip install pymongo) — will save to file only.")
 
 # ==========================================
 # 2. SETUP DRIVER
@@ -25,18 +40,217 @@ def setup_driver():
 # ==========================================
 # 3. HELPER FUNCTIONS
 # ==========================================
-def extract_valid_prices(text):
-    """Scans text for valid integer prices between 2500 and 300000."""
-    if not text: return []
-    matches = re.findall(r'[\d,]+', str(text))
-    valid_prices = []
-    for m in matches:
-        clean = m.replace(',', '')
-        if clean.isdigit():
-            val = int(clean)
-            if 2500 < val < 300000: 
-                valid_prices.append(val)
-    return valid_prices
+
+# Words that appear near EMI / installment prices — skip any line containing these
+_EMI_KEYWORDS = [
+    'emi', 'per month', '/month', 'monthly', 'installment',
+    'easy pay', 'no cost', 'x 3 ', 'x 6 ', 'x 9 ', 'x 12 ',
+    'weeks', 'weekly', 'fortnight', 'bajaj', 'zest', 'cardless',
+]
+
+# Store suffixes to strip from og:title / page title
+_STORE_SUFFIXES = [
+    ' – Mainstreet', ' - Mainstreet',
+    ' – Superkicks', ' - Superkicks', ' | Superkicks',
+    ' – VegNonVeg',  ' - VegNonVeg',  ' | VegNonVeg',
+    ' – Crepdog Crew',' - Crepdog Crew','| Crepdog Crew',
+    ' | India', ' – India', ' - India',
+    ' | Sneaker Street', ' - Sneaker Street',
+    ' | SneakerStreet',
+    ' | Shopify',
+]
+
+def _parse_price_str(raw):
+    """Convert a raw price string like '17,999.00' or '17999' to int. Returns 0 on failure."""
+    try:
+        cleaned = re.sub(r'[^\d.]', '', str(raw))
+        val = int(float(cleaned))
+        if 2500 < val < 300000:
+            return val
+    except Exception:
+        pass
+    return 0
+
+def extract_price(driver):
+    """
+    Priority-based price extraction:
+      1. JSON-LD Product offers.price  (most accurate)
+      2. Meta product:price:amount / og:price:amount
+      3. Shopify price CSS selectors
+      4. Body text scan — EMI lines filtered out first
+    Returns int rupees, or 0 if not found.
+    """
+    # 1. JSON-LD
+    try:
+        scripts = driver.find_elements(By.CSS_SELECTOR, "script[type='application/ld+json']")
+        for script in scripts:
+            try:
+                data = json.loads(script.get_attribute('innerHTML') or '{}')
+                offers = None
+                if isinstance(data, list):
+                    for entry in data:
+                        if isinstance(entry, dict) and entry.get('@type') == 'Product':
+                            offers = entry.get('offers', {})
+                            break
+                elif data.get('@type') == 'Product':
+                    offers = data.get('offers', {})
+                if offers:
+                    if isinstance(offers, list):
+                        offers = offers[0]
+                    price = _parse_price_str(offers.get('price', '0'))
+                    if price:
+                        return price
+            except Exception:
+                pass
+    except Exception:
+        pass
+
+    # 2. Meta price tags
+    for selector in [
+        "meta[property='product:price:amount']",
+        "meta[property='og:price:amount']",
+        "meta[itemprop='price']",
+    ]:
+        try:
+            meta = driver.find_element(By.CSS_SELECTOR, selector)
+            price = _parse_price_str(meta.get_attribute('content'))
+            if price:
+                return price
+        except Exception:
+            pass
+
+    # 3. Shopify / common price CSS selectors
+    PRICE_SELECTORS = [
+        ".price-item--sale",
+        ".price-item--regular",
+        ".price__current",
+        ".product__price",
+        ".product-meta__price",
+        "[data-product-price]",
+        "[data-price]",
+        ".price",
+    ]
+    for sel in PRICE_SELECTORS:
+        try:
+            el = driver.find_element(By.CSS_SELECTOR, sel)
+            text = el.text.strip()
+            # Only accept lines that look like a price (contain ₹ or digits)
+            nums = re.findall(r'[\d,]+', text.replace(',', ''))
+            for n in nums:
+                price = _parse_price_str(n)
+                if price:
+                    return price
+        except Exception:
+            pass
+
+    # 4. Body text fallback — strip EMI lines first
+    try:
+        body_text = driver.find_element(By.TAG_NAME, "body").text
+        clean_lines = []
+        for line in body_text.split('\n'):
+            low = line.lower()
+            if not any(kw in low for kw in _EMI_KEYWORDS):
+                clean_lines.append(line)
+
+        # Prefer lines that have a rupee symbol — those are almost always real prices
+        rupee_prices = []
+        for line in clean_lines:
+            if '₹' in line or 'Rs.' in line or 'INR' in line:
+                nums = re.findall(r'[\d,]+', line)
+                for n in nums:
+                    price = _parse_price_str(n.replace(',', ''))
+                    if price:
+                        rupee_prices.append(price)
+
+        if rupee_prices:
+            # Among currency-prefixed prices, the minimum is almost always retail
+            return min(rupee_prices)
+
+        # No rupee symbol found — scan all clean lines, take minimum
+        all_prices = []
+        for line in clean_lines:
+            nums = re.findall(r'[\d,]+', line)
+            for n in nums:
+                price = _parse_price_str(n.replace(',', ''))
+                if price:
+                    all_prices.append(price)
+        if all_prices:
+            return min(all_prices)
+    except Exception:
+        pass
+
+    return 0
+
+
+def extract_name(driver):
+    """
+    Priority-based name extraction:
+      1. og:title meta tag  (product-specific, already cleaned by the store)
+      2. JSON-LD Product name
+      3. Shopify / product-specific h1 CSS selectors
+      4. Generic h1
+      5. Page title (stripped of store suffix)
+    Returns a string.
+    """
+    # 1. og:title
+    try:
+        meta = driver.find_element(By.CSS_SELECTOR, "meta[property='og:title']")
+        name = (meta.get_attribute('content') or '').strip()
+        if name and len(name) > 4:
+            for suffix in _STORE_SUFFIXES:
+                name = name.replace(suffix, '')
+            name = name.strip(' -–|')
+            if name:
+                return name
+    except Exception:
+        pass
+
+    # 2. JSON-LD Product name
+    try:
+        scripts = driver.find_elements(By.CSS_SELECTOR, "script[type='application/ld+json']")
+        for script in scripts:
+            try:
+                data = json.loads(script.get_attribute('innerHTML') or '{}')
+                entries = data if isinstance(data, list) else [data]
+                for entry in entries:
+                    if isinstance(entry, dict) and entry.get('@type') == 'Product':
+                        name = (entry.get('name') or '').strip()
+                        if name and len(name) > 4:
+                            return name
+            except Exception:
+                pass
+    except Exception:
+        pass
+
+    # 3. Product-specific h1 selectors (Shopify / Dawn theme / common patterns)
+    for sel in [
+        "h1.product-meta__title",
+        "h1.product__title",
+        "h1[class*='product']",
+        "h1[itemprop='name']",
+    ]:
+        try:
+            el = driver.find_element(By.CSS_SELECTOR, sel)
+            name = el.text.strip()
+            if name and len(name) > 4:
+                return name
+        except Exception:
+            pass
+
+    # 4. Generic h1
+    try:
+        name = driver.find_element(By.TAG_NAME, "h1").text.strip()
+        if name and len(name) > 4:
+            return name
+    except Exception:
+        pass
+
+    # 5. Page title fallback
+    title = driver.title
+    for sep in [' | ', ' – ', ' - ', ' — ']:
+        title = title.split(sep)[0]
+    return title.strip()
+
 
 def normalize_brand(text):
     text = text.lower()
@@ -66,11 +280,11 @@ def normalize_brand(text):
     if 'salomon' in text: return 'Salomon'
     if 'ugg' in text: return 'UGG'
     if 'vans' in text: return 'Vans'
-    
+
     # Indian D2C / Others
     if 'comet' in text: return 'Comet'
     if 'crocs' in text: return 'Crocs'
-    
+
     return 'Streetwear'
 
 # ==========================================
@@ -79,35 +293,18 @@ def normalize_brand(text):
 def scrape_single_product(driver, url):
     """Scrapes a specific product page."""
     driver.get(url)
-    time.sleep(2) # Short wait
+    time.sleep(2)
 
-    item = {}
     try:
-        # --- NAME ---
-        try:
-            name = driver.find_element(By.CSS_SELECTOR, "h1.product-meta__title").text.strip()
-        except:
-            try:
-                name = driver.find_element(By.TAG_NAME, "h1").text.strip()
-            except:
-                name = driver.title.split('|')[0].strip()
-
-        # --- PRICE (Nuclear Method) ---
-        price = 0
-        try:
-            body_text = driver.find_element(By.TAG_NAME, "body").text
-            found_prices = extract_valid_prices(body_text)
-            if found_prices:
-                price = min(found_prices)
-        except:
-            pass
+        name  = extract_name(driver)
+        price = extract_price(driver)
 
         # --- IMAGE (Meta Strategy) ---
         img_src = ""
         try:
             meta_img = driver.find_element(By.CSS_SELECTOR, "meta[property='og:image']")
             img_src = meta_img.get_attribute("content")
-        except:
+        except Exception:
             try:
                 imgs = driver.find_elements(By.TAG_NAME, "img")
                 for i in imgs:
@@ -115,36 +312,36 @@ def scrape_single_product(driver, url):
                     if w and int(w) > 400:
                         img_src = i.get_attribute("src")
                         break
-            except:
+            except Exception:
                 pass
 
-        # Clean URL
+        # Clean image URL
         if img_src and img_src.startswith("//"): img_src = "https:" + img_src
         if img_src and "?" in img_src: img_src = img_src.split("?")[0]
 
-        # Extract source domain for description
+        # Source domain for description
         try:
             from urllib.parse import urlparse
             source_domain = urlparse(url).netloc.replace("www.", "")
-        except:
+        except Exception:
             source_domain = url
 
         item = {
-            "_id": f"s_{random.randint(10000,99999)}_{int(time.time())}",
-            "shoeName": name,
-            "brand": normalize_brand(name),
+            "_id":         f"s_{random.randint(10000,99999)}_{int(time.time())}",
+            "shoeName":    name,
+            "brand":       normalize_brand(name),
             "retailPrice": price,
-            "thumbnail": img_src,
-            "url": url,
-            "description": f"Sourced from {source_domain}"
+            "thumbnail":   img_src,
+            "url":         url,
+            "description": f"Sourced from {source_domain}",
+            "rand":        random.random(),
         }
 
-        # Validate
         if item.get("thumbnail") and item.get("retailPrice") > 0:
             print(f"   + Found: {item['shoeName']} (₹{item['retailPrice']})")
             return item
         else:
-            print(f"   x Skipped (Missing Data): {url}")
+            print(f"   x Skipped (missing data — name: '{name}', price: {price}): {url}")
             return None
 
     except Exception as e:
@@ -157,22 +354,21 @@ def scrape_single_product(driver, url):
 def scrape_collection(driver, collection_url):
     """Crawls a collection page, finds links, and scrapes them."""
     print(f"\n--- 📦 DETECTED COLLECTION: {collection_url} ---")
-    
+
     try:
         pages = int(input("   How many pages to scan? (e.g., 1, 2, 5): "))
-    except:
+    except Exception:
         pages = 1
-        
+
     all_product_links = []
-    
+
     # 1. GATHER LINKS
     for i in range(1, pages + 1):
         page_url = f"{collection_url}?page={i}"
         print(f"   > Scanning Page {i}...")
         driver.get(page_url)
         time.sleep(3)
-        
-        # Find all links that look like products
+
         links = driver.find_elements(By.TAG_NAME, "a")
         count = 0
         for l in links:
@@ -184,16 +380,15 @@ def scrape_collection(driver, collection_url):
         print(f"     Found {count} products.")
 
     print(f"\n🚀 STARTING BULK SCRAPE ({len(all_product_links)} items found)...")
-    
+
     scraped_data = []
     for idx, link in enumerate(all_product_links):
         print(f"   [{idx+1}/{len(all_product_links)}] Processing...", end="\r")
         data = scrape_single_product(driver, link)
         if data:
             scraped_data.append(data)
-            # Polite sleep between requests
-            time.sleep(2) 
-            
+            time.sleep(2)  # Polite delay
+
     return scraped_data
 
 # ==========================================
@@ -201,41 +396,50 @@ def scrape_collection(driver, collection_url):
 # ==========================================
 def main():
     print("==========================================")
-    print("   SNEAKOPEDIA: HYBRID BOT V8.0")
+    print("   SNEAKOPEDIA: HYBRID BOT V9.1")
     print("==========================================")
-    
+
     driver = setup_driver()
 
     while True:
         print("\nPaste LINK (Collection OR Product). Type 'exit' to stop.")
         url = input("🔗 > ").strip()
-        
+
         if url.lower() in ['exit', 'quit']:
             break
-            
+
         if len(url) < 5: continue
-        
+
         results = []
-        
+
         # --- DECISION LOGIC ---
         if "/collections/" in url or "/search" in url:
-            # It's a list of shoes -> Run Collection Scraper
             results = scrape_collection(driver, url)
         else:
-            # It's a single shoe -> Run Single Scraper
             print("\n--- 👟 DETECTED SINGLE PRODUCT ---")
             data = scrape_single_product(driver, url)
             if data:
                 results.append(data)
-        
+
         # --- SAVE RESULTS ---
         if results:
+            # Always write to file as backup
             print(f"\n💾 SAVING {len(results)} ITEMS TO FILE...")
             with open(OUTPUT_FILE, "a", encoding="utf-8") as f:
                 for item in results:
                     json_str = json.dumps(item, indent=4)
-                    f.write(json_str + ",\n") 
-            print("✅ SUCCESS! Data Saved.")
+                    f.write(json_str + ",\n")
+            print("✅ File saved.")
+
+            # Write to MongoDB if connected
+            if mongo_col is not None:
+                print(f"📡 UPLOADING {len(results)} ITEMS TO MONGODB...")
+                ops = [
+                    UpdateOne({"_id": item["_id"]}, {"$set": item}, upsert=True)
+                    for item in results
+                ]
+                res = mongo_col.bulk_write(ops, ordered=False)
+                print(f"✅ MongoDB: {res.upserted_count} inserted, {res.modified_count} updated.")
 
     driver.quit()
 

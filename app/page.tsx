@@ -71,36 +71,37 @@ const getSafeImage = (sneaker: any) => {
 
 const getLinks = (sneakerName: string, brand: string, size?: string) => {
   const cleanName = sneakerName.replace(/[|{}<>]/g, ' ').replace(/\s+/g, ' ').trim();
-  const sizeQuery = size ? ` US ${size}` : '';
-  const query = encodeURIComponent(cleanName + sizeQuery);
+  const baseQuery  = encodeURIComponent(cleanName);
   const b = brand ? brand.toLowerCase() : '';
 
+  // Domestic D2C brands — search by name only (no size; their search doesn't support it)
   if (b.includes('comet')) {
-    return { desi: [{ name: "Comet Official", url: `https://www.wearcomet.com/search?q=${query}` }], global: [] };
+    return { desi: [{ name: "Comet Official", url: `https://www.wearcomet.com/search?q=${baseQuery}` }], global: [] };
   }
   if (b.includes('thaely')) {
-    return { desi: [{ name: "Thaely Official", url: `https://thaely.com/search?q=${query}` }], global: [] };
+    return { desi: [{ name: "Thaely Official", url: `https://thaely.com/search?q=${baseQuery}` }], global: [] };
   }
   if (b.includes('gully') || b.includes('gully labs')) {
-    return { desi: [{ name: "Gully Labs", url: `https://www.gullylabs.com/search?q=${query}` }], global: [] };
+    return { desi: [{ name: "Gully Labs", url: `https://www.gullylabs.com/search?q=${baseQuery}` }], global: [] };
   }
   if (b.includes('7-10') || b.includes('7 10')) {
-    return { desi: [{ name: "7-10 Official", url: `https://www.7-10.in/search?q=${query}` }], global: [] };
+    return { desi: [{ name: "7-10 Official", url: `https://www.7-10.in/search?q=${baseQuery}` }], global: [] };
   }
   if (b.includes('bacca') || b.includes('bucci')) {
-    return { desi: [{ name: "Bacca Bucci", url: `https://baccabucci.com/search?q=${query}` }], global: [] };
+    return { desi: [{ name: "Bacca Bucci", url: `https://baccabucci.com/search?q=${baseQuery}` }], global: [] };
   }
 
+  // StockX and GOAT support native size URL params — use them
   const stockxSize = size ? `&shoe_size=${size}` : '';
   const goatSize   = size ? `&size=${size}` : '';
-  const baseQuery  = encodeURIComponent(cleanName);
 
   return {
+    // Indian retailers use name-only search — adding size breaks their search
     desi: [
-      { name: "Mainstreet",   url: `https://marketplace.mainstreet.co.in/search?q=${query}` },
-      { name: "VegNonVeg",    url: `https://www.vegnonveg.com/search?q=${query}` },
-      { name: "Superkicks",   url: `https://www.superkicks.in/search?q=${query}` },
-      { name: "Crepdog Crew", url: `https://crepdogcrew.com/search?q=${query}` },
+      { name: "Mainstreet",   url: `https://marketplace.mainstreet.co.in/search?q=${baseQuery}` },
+      { name: "VegNonVeg",    url: `https://www.vegnonveg.com/search?q=${baseQuery}` },
+      { name: "Superkicks",   url: `https://www.superkicks.in/search?q=${baseQuery}` },
+      { name: "Crepdog Crew", url: `https://crepdogcrew.com/search?q=${baseQuery}` },
     ],
     global: [
       { name: "StockX", url: `https://stockx.com/search?s=${baseQuery}${stockxSize}` },
