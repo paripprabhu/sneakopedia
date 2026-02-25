@@ -69,7 +69,7 @@ const getSafeImage = (sneaker: any) => {
   return url;
 };
 
-const getLinks = (sneakerName: string, brand: string, size?: string) => {
+const getLinks = (sneakerName: string, brand: string) => {
   const cleanName = sneakerName.replace(/[|{}<>]/g, ' ').replace(/\s+/g, ' ').trim();
   const baseQuery  = encodeURIComponent(cleanName);
   const b = brand ? brand.toLowerCase() : '';
@@ -91,21 +91,18 @@ const getLinks = (sneakerName: string, brand: string, size?: string) => {
     return { desi: [{ name: "Bacca Bucci", url: `https://baccabucci.com/search?q=${baseQuery}` }], global: [] };
   }
 
-  // StockX and GOAT support native size URL params — use them
-  const stockxSize = size ? `&shoe_size=${size}` : '';
-  const goatSize   = size ? `&size=${size}` : '';
-
   return {
-    // Indian retailers use name-only search — adding size breaks their search
     desi: [
       { name: "Mainstreet",   url: `https://marketplace.mainstreet.co.in/search?q=${baseQuery}` },
       { name: "VegNonVeg",    url: `https://www.vegnonveg.com/search?q=${baseQuery}` },
+      { name: "LTD Edition",  url: `https://limitededt.in/search?q=${baseQuery}` },
       { name: "Superkicks",   url: `https://www.superkicks.in/search?q=${baseQuery}` },
       { name: "Crepdog Crew", url: `https://crepdogcrew.com/search?q=${baseQuery}` },
     ],
     global: [
-      { name: "StockX", url: `https://stockx.com/search?s=${baseQuery}${stockxSize}` },
-      { name: "GOAT",   url: `https://www.goat.com/search?query=${baseQuery}${goatSize}` },
+      // Size params removed — retailer search pages don't support them and return wrong/empty results
+      { name: "StockX", url: `https://stockx.com/search?s=${baseQuery}` },
+      { name: "GOAT",   url: `https://www.goat.com/search?query=${baseQuery}` },
     ],
   };
 };
@@ -663,7 +660,7 @@ export default function Sneakopedia() {
       'superkicks.in':                'Superkicks',
       'images.vegnonveg.com':         'VegNonVeg',
       'vegnonveg.com':                'VegNonVeg',
-      'limitededt.in':                'VegNonVeg',
+      'limitededt.in':                'LTD Edition',
       'wearcomet.com':                'Comet Official',
       'baccabucci.com':               'Bacca Bucci',
       'gullylabs.com':                'Gully Labs',
@@ -688,51 +685,51 @@ export default function Sneakopedia() {
 
     // Static brand map — secondary layer for retailers not confirmed by data
     const brandMap: Record<string, string[]> = {
-      nike:            ['Mainstreet', 'VegNonVeg', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
-      jordan:          ['Mainstreet', 'VegNonVeg', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
-      adidas:          ['Mainstreet', 'VegNonVeg', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
-      yeezy:           ['VegNonVeg', 'Crepdog Crew', 'StockX', 'GOAT'],
-      'new balance':   ['VegNonVeg', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
-      asics:           ['VegNonVeg', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
-      puma:            ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
+      nike:            ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      jordan:          ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      adidas:          ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      yeezy:           ['VegNonVeg', 'LTD Edition', 'Crepdog Crew', 'StockX', 'GOAT'],
+      'new balance':   ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      asics:           ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      puma:            ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'StockX', 'GOAT'],
       reebok:          ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
-      converse:        ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
-      vans:            ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
-      hoka:            ['VegNonVeg', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
-      'on running':    ['VegNonVeg', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
-      'on cloud':      ['VegNonVeg', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
-      salomon:         ['VegNonVeg', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
-      bape:            ['Crepdog Crew', 'StockX', 'GOAT'],
+      converse:        ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'StockX', 'GOAT'],
+      vans:            ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'StockX', 'GOAT'],
+      hoka:            ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      'on running':    ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      'on cloud':      ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      salomon:         ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      bape:            ['LTD Edition', 'Crepdog Crew', 'StockX', 'GOAT'],
       balenciaga:      ['StockX', 'GOAT'],
       'off-white':     ['StockX', 'GOAT'],
       'rick owens':    ['StockX', 'GOAT'],
       'louis vuitton': ['StockX', 'GOAT'],
       dior:            ['StockX', 'GOAT'],
-      'fear of god':   ['StockX', 'GOAT'],
-      essentials:      ['Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      'fear of god':   ['LTD Edition', 'StockX', 'GOAT'],
+      essentials:      ['LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
       represent:       ['StockX', 'GOAT'],
       mschf:           ['StockX', 'GOAT'],
       'golden goose':  ['StockX', 'GOAT'],
       'maison mihara': ['StockX', 'GOAT'],
       'axel arigato':  ['StockX', 'GOAT'],
-      ugg:             ['VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
+      ugg:             ['VegNonVeg', 'LTD Edition', 'Superkicks', 'StockX', 'GOAT'],
       fila:            ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
       'under armour':  ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
       skechers:        ['Mainstreet', 'VegNonVeg', 'Superkicks'],
-      birkenstock:     ['VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
+      birkenstock:     ['VegNonVeg', 'LTD Edition', 'Superkicks', 'StockX', 'GOAT'],
       timberland:      ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
-      'dr. martens':   ['VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
-      saucony:         ['VegNonVeg', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      'dr. martens':   ['VegNonVeg', 'LTD Edition', 'Superkicks', 'StockX', 'GOAT'],
+      saucony:         ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
       mizuno:          ['VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
       'li-ning':       ['VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
       anta:            ['VegNonVeg', 'StockX', 'GOAT'],
       crocs:           ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
-      supreme:         ['StockX', 'GOAT'],
+      supreme:         ['LTD Edition', 'StockX', 'GOAT'],
       palace:          ['StockX', 'GOAT'],
-      stussy:          ['StockX', 'GOAT'],
+      stussy:          ['LTD Edition', 'StockX', 'GOAT'],
       'travis scott':  ['StockX', 'GOAT'],
       ovo:             ['StockX', 'GOAT'],
-      nocta:           ['Crepdog Crew', 'StockX', 'GOAT'],
+      nocta:           ['LTD Edition', 'Crepdog Crew', 'StockX', 'GOAT'],
       brooks:          ['Mainstreet', 'VegNonVeg', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
       columbia:        ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
       merrell:         ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
@@ -747,10 +744,9 @@ export default function Sneakopedia() {
     const multipliers: Record<string, number> = {
       'Mainstreet':      1.00,
       'VegNonVeg':       1.02,
+      'LTD Edition':     1.02,
       'Superkicks':      1.00,
       'Crepdog Crew':    1.05,
-      'StockX':          1.15,
-      'GOAT':            1.12,
       'Comet Official':  1.00,
       'Thaely Official': 1.00,
       'Gully Labs':      1.00,
@@ -761,7 +757,7 @@ export default function Sneakopedia() {
     // Build availableAt:
     // 1. If confirmed source is D2C → only that store
     // 2. Otherwise → brand map result (or all retailers if unmapped) + confirmed source merged in
-    const allRetailers = ['Mainstreet', 'VegNonVeg', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'];
+    const allRetailers = ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'];
     let availableAt: string[];
 
     if (confirmedRetailer && d2cRetailers.has(confirmedRetailer)) {
@@ -775,7 +771,7 @@ export default function Sneakopedia() {
       }
     }
 
-    const links = getLinks(sneaker.shoeName, sneaker.brand, mySize || undefined);
+    const links = getLinks(sneaker.shoeName, sneaker.brand);
 
     // Helper: if we have a direct product URL from scraping and it matches this retailer, use it
     const directUrl = (linkName: string) =>
@@ -1513,14 +1509,40 @@ export default function Sneakopedia() {
                       const prices = getPlatformPrices(selectedSneaker);
                       const { confirmedRetailer } = prices;
 
+                      const globalRetailers = new Set(['StockX', 'GOAT']);
+
                       const renderLink = (link: any, idx: number) => {
                         const isLive = link.name === confirmedRetailer;
+                        const isGlobal = globalRetailers.has(link.name);
+
+                        // Global retailers (StockX, GOAT) are always shown as active links
+                        // but without an INR price — they sell in USD at resale rates
+                        if (isGlobal) {
+                          return (
+                            <a
+                              key={idx}
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex justify-between items-center px-4 py-3 bg-zinc-900 border border-transparent font-mono text-[10px] uppercase group transition-all cursor-pointer"
+                              onMouseEnter={({ currentTarget }) => { currentTarget.style.borderColor = hex; }}
+                              onMouseLeave={({ currentTarget }) => { currentTarget.style.borderColor = 'transparent'; }}
+                            >
+                              <span className="font-bold text-zinc-300 group-hover:text-white">{link.name}</span>
+                              <div className="flex items-center gap-3">
+                                <span className="text-zinc-500 text-[9px]">USD — check site</span>
+                                <span className="text-zinc-600 group-hover:text-zinc-300">↗</span>
+                              </div>
+                            </a>
+                          );
+                        }
 
                         return link.price ? (
                           <a
                             key={idx}
                             href={link.url}
                             target="_blank"
+                            rel="noopener noreferrer"
                             className="flex justify-between items-center px-4 py-3 bg-zinc-900 border border-transparent font-mono text-[10px] uppercase group transition-all cursor-pointer"
                             onMouseEnter={({ currentTarget }) => { currentTarget.style.borderColor = hex; }}
                             onMouseLeave={({ currentTarget }) => { currentTarget.style.borderColor = 'transparent'; }}
@@ -1567,7 +1589,7 @@ export default function Sneakopedia() {
 
                           {/* DISCLAIMER */}
                           <p className="font-mono text-[9px] text-zinc-600 uppercase tracking-wide">
-                            Prices marked <span className="text-zinc-400">~</span> are estimated. <span style={{ color: hex }}>LIVE</span> = indexed price from source.
+                            <span style={{ color: hex }}>LIVE</span> = indexed price from source. <span className="text-zinc-400">~</span> = estimated INR. StockX/GOAT prices are in USD.
                           </p>
 
                           {prices.desi.length > 0 && (
