@@ -122,9 +122,10 @@ export default function Sneakopedia() {
   
   // Data State
   const [sneakers, setSneakers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
 
@@ -164,6 +165,7 @@ export default function Sneakopedia() {
 
   // Responsive mobile detection
   const [isMobile, setIsMobile] = useState(false);
+  const [atBottom, setAtBottom] = useState(false);
 
   // --- GRAIL LOGIC ---
   const toggleGrail = (sneaker: any) => {
@@ -410,19 +412,30 @@ export default function Sneakopedia() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
 
+    // Scroll-to-bottom detection for social links
+    const handleScroll = () => {
+      const scrolledToBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100;
+      setAtBottom(scrolledToBottom);
+    };
+    window.addEventListener('scroll', handleScroll);
+
     // Deep Linking Check
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
     if (id) {
-       fetch(`/api/sneakers?id=${id}`)
+       fetch(`/api/sneakers?id=${encodeURIComponent(id)}`)
          .then(res => res.json())
          .then(data => {
             if (data && data.length > 0) setSelectedSneaker(data[0]);
             else if (data.data && data.data.length > 0) setSelectedSneaker(data.data[0]);
-         });
+         })
+         .catch(() => {});
     }
 
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   // --- URL SYNC & HISTORY ---
@@ -468,14 +481,22 @@ export default function Sneakopedia() {
         params.append('brands', selectedBrands.join(','));
       }
 
-      const res = await fetch(`/api/sneakers?${params.toString()}`);
+      setFetchError(null);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+      const res = await fetch(`/api/sneakers?${params.toString()}`, { signal: controller.signal });
+      clearTimeout(timeout);
       const data = await res.json();
 
       setSneakers(data.data || []);
       setTotalPages(data.pagination?.totalPages || 1);
       setTotalItems(data.pagination?.totalItems || 0);
     } catch (error) {
-      console.error("Fetch error", error);
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        setFetchError('Search timed out. Please try again.');
+      } else {
+        setFetchError('Failed to load sneakers. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -547,7 +568,10 @@ export default function Sneakopedia() {
   const handleRandomizer = async () => {
     if (!selectedSneaker) setLoading(true); 
     try {
-      const res = await fetch(`/api/sneakers?random=true`);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+      const res = await fetch(`/api/sneakers?random=true`, { signal: controller.signal });
+      clearTimeout(timeout);
       const data = await res.json();
       if (data && data.length > 0) {
         setSelectedSneaker(data[0]);
@@ -918,7 +942,7 @@ export default function Sneakopedia() {
 
            {/* CLEAR BUTTON */}
            <button 
-             onClick={() => { setSelectedBrands([]); setPriceRange(200000); setPriceMin(0); setActiveBucket('ALL'); }}
+             onClick={() => { setSelectedBrands([]); setPriceRange(200000); setPriceMin(0); setActiveBucket('ALL'); setSearchInput(''); setDebouncedSearch(''); setSortType('none'); setCurrentPage(1); }}
              className="w-full mt-12 py-3 border border-red-900/50 text-red-500 hover:bg-red-900/20 font-mono text-[10px] uppercase"
            >
              RESET_ALL_SYSTEMS
@@ -1226,6 +1250,14 @@ export default function Sneakopedia() {
               </div>
             </div>
 
+            {/* ERROR BANNER */}
+            {fetchError && (
+              <div className="mt-4 w-full border border-red-900/50 bg-red-950/30 p-4 flex items-center justify-between">
+                <span className="font-mono text-xs text-red-400">{fetchError}</span>
+                <button onClick={() => setFetchError(null)} className="font-mono text-[10px] text-red-500 hover:text-red-300 ml-4">DISMISS</button>
+              </div>
+            )}
+
             {/* GRID RESULTS */}
             {loading ? (
                <div className="mt-8 w-full border-t border-zinc-800 pt-12 opacity-60 grid grid-cols-2 md:grid-cols-4 gap-4 animate-pulse">
@@ -1267,7 +1299,7 @@ export default function Sneakopedia() {
                              <button
                                onClick={(e) => handleWhatsAppShare(sneaker, e)}
                                title="Share on WhatsApp"
-                               className="opacity-0 group-hover:opacity-100 transition-opacity font-mono text-[9px] text-zinc-600 hover:text-green-400 px-1"
+                               className={`${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity font-mono text-[9px] text-zinc-600 hover:text-green-400 px-1`}
                              >
                                WA↗
                              </button>
@@ -1299,28 +1331,74 @@ export default function Sneakopedia() {
                 </div>
 
                 {totalPages > 1 && (
-                  <div className="flex items-center gap-4 mt-20 border border-zinc-800 bg-zinc-900 px-6 py-3">
-                    <button 
-                      onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo({top:0, behavior:'smooth'}); }} 
-                      disabled={currentPage === 1} 
-                      className="text-zinc-400 hover:text-white disabled:opacity-30 text-xs font-mono"
+                  <div className="flex items-center justify-center gap-2 mt-20 border border-zinc-800 bg-zinc-900 px-4 py-3 flex-wrap">
+                    <button
+                      onClick={() => { setCurrentPage(1); window.scrollTo({top:0, behavior:'smooth'}); }}
+                      disabled={currentPage === 1}
+                      className="text-zinc-400 hover:text-white disabled:opacity-30 text-xs font-mono px-2"
+                    >
+                      {'<< FIRST'}
+                    </button>
+                    <button
+                      onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo({top:0, behavior:'smooth'}); }}
+                      disabled={currentPage === 1}
+                      className="text-zinc-400 hover:text-white disabled:opacity-30 text-xs font-mono px-2"
                     >
                       {'< PREV'}
                     </button>
-                    <span className="font-mono text-zinc-300 text-xs tracking-tighter">PAGE {currentPage} / {totalPages}</span>
-                    <button 
-                      onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo({top:0, behavior:'smooth'}); }} 
-                      disabled={currentPage === totalPages} 
-                      className="text-zinc-400 hover:text-white disabled:opacity-30 text-xs font-mono"
+                    <span className="font-mono text-zinc-300 text-xs tracking-tighter flex items-center gap-1">
+                      PAGE{' '}
+                      <input
+                        type="number"
+                        min={1}
+                        max={totalPages}
+                        value={currentPage}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value);
+                          if (!isNaN(val) && val >= 1 && val <= totalPages) {
+                            setCurrentPage(val);
+                            window.scrollTo({top:0, behavior:'smooth'});
+                          }
+                        }}
+                        className="w-12 bg-zinc-800 border border-zinc-700 text-center text-zinc-200 font-mono text-xs py-1 rounded-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
+                      {' '}/ {totalPages}
+                    </span>
+                    <button
+                      onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo({top:0, behavior:'smooth'}); }}
+                      disabled={currentPage === totalPages}
+                      className="text-zinc-400 hover:text-white disabled:opacity-30 text-xs font-mono px-2"
                     >
                       {'NEXT >'}
+                    </button>
+                    <button
+                      onClick={() => { setCurrentPage(totalPages); window.scrollTo({top:0, behavior:'smooth'}); }}
+                      disabled={currentPage === totalPages}
+                      className="text-zinc-400 hover:text-white disabled:opacity-30 text-xs font-mono px-2"
+                    >
+                      {'LAST >>'}
                     </button>
                   </div>
                 )}
               </>
             ) : (
-               <div className="mt-12 text-zinc-500 font-mono text-xs uppercase border border-zinc-800 p-8">
-                 {debouncedSearch ? "No Results Found in Archive" : "System Ready. Awaiting Input."}
+               <div className="mt-12 text-zinc-500 font-mono text-xs border border-zinc-800 p-8 text-center">
+                 {debouncedSearch ? (
+                   <div className="space-y-3">
+                     <p className="uppercase">No results for &quot;{debouncedSearch}&quot;</p>
+                     <p className="text-zinc-600 normal-case">Try a different search term, remove some filters, or check your spelling.</p>
+                     {(selectedBrands.length > 0 || priceRange < 200000 || priceMin > 0) && (
+                       <button
+                         onClick={() => { setSelectedBrands([]); setPriceRange(200000); setPriceMin(0); setActiveBucket('ALL'); setCurrentPage(1); }}
+                         className="mt-2 px-4 py-2 border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500 font-mono text-[10px] uppercase transition-colors"
+                       >
+                         Clear all filters
+                       </button>
+                     )}
+                   </div>
+                 ) : (
+                   <p className="uppercase">System Ready. Awaiting Input.</p>
+                 )}
                </div>
             )}
 
@@ -1553,6 +1631,25 @@ export default function Sneakopedia() {
            <button onClick={() => handleThemeChange('rose')} className={`w-4 h-4 rounded-full bg-rose-500 border-2 transition-all ${theme === 'rose' ? 'border-white scale-110' : 'border-transparent opacity-50 hover:opacity-100'}`} title="System Red"></button>
         </div>
       </footer>
+
+      {/* SOCIAL LINKS — visible only at bottom of page */}
+      <div className={`fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 transition-all duration-500 ${atBottom ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+        <p className="text-zinc-500 text-xs text-right max-w-[240px]">This project is free and open — I do not profit from it.</p>
+        <div className="flex gap-2">
+          <a href="https://www.instagram.com/parichay.p_/" target="_blank" rel="noopener noreferrer" className="social-icon w-[52px] h-[52px] flex items-center justify-center bg-[rgb(44,44,44)] rounded-[5px] cursor-pointer transition-all duration-300 hover:bg-[#d62976]" title="Instagram">
+            <svg width="17" height="17" fill="white" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="https://in.pinterest.com/ParichayPrabhu/" target="_blank" rel="noopener noreferrer" className="social-icon w-[52px] h-[52px] flex items-center justify-center bg-[rgb(44,44,44)] rounded-[5px] cursor-pointer transition-all duration-300 hover:bg-[#E60023]" title="Pinterest">
+            <svg width="17" height="17" fill="white" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/parichay-prabhu-12328b228/" target="_blank" rel="noopener noreferrer" className="social-icon w-[52px] h-[52px] flex items-center justify-center bg-[rgb(44,44,44)] rounded-[5px] cursor-pointer transition-all duration-300 hover:bg-[#0072b1]" title="LinkedIn">
+            <svg width="17" height="17" fill="white" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5H.02V24h5v-16zm7.982 0h-4.968V24h4.969v-8.399c0-4.67 6.029-5.052 6.029 0V24H24V13.869c0-7.88-8.922-7.593-11.018-3.714V8z"/></svg>
+          </a>
+          <a href="https://wa.me/916282322896" target="_blank" rel="noopener noreferrer" className="social-icon w-[52px] h-[52px] flex items-center justify-center bg-[rgb(44,44,44)] rounded-[5px] cursor-pointer transition-all duration-300 hover:bg-[green]" title="WhatsApp">
+            <svg width="17" height="17" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,15 +1,25 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  compress: true, // Zips text files (makes them 70% smaller)
+  compress: true,
   httpAgentOptions: {
-    keepAlive: true, // Keeps connection open for faster repeated searches
+    keepAlive: true,
   },
   images: {
     remotePatterns: [
-      { protocol: "https", hostname: "**" }, // Allows all external images
+      // Image proxy (used for cross-origin thumbnails)
+      { protocol: "https", hostname: "wsrv.nl" },
+      // Retailer CDNs that appear in thumbnail URLs
+      { protocol: "https", hostname: "*.shopify.com" },
+      { protocol: "https", hostname: "crepdogcrew.com" },
+      { protocol: "https", hostname: "*.crepdogcrew.com" },
+      { protocol: "https", hostname: "mainstreet.co.in" },
+      { protocol: "https", hostname: "*.mainstreet.co.in" },
+      { protocol: "https", hostname: "images.vegnonveg.com" },
+      { protocol: "https", hostname: "superkicks.in" },
+      { protocol: "https", hostname: "*.superkicks.in" },
     ],
-    minimumCacheTTL: 60 * 60 * 24, // Cache images for 24 hours
+    minimumCacheTTL: 60 * 60 * 24 * 7, // 7 days — sneaker images rarely change
   },
 };
 

@@ -30,6 +30,9 @@ const SneakerSchema = new Schema<ISneaker>(
 // Compound index for regex text search on shoeName + brand
 SneakerSchema.index({ shoeName: 1, brand: 1 });
 
+// Text index for full-text search (faster than regex for large collections)
+SneakerSchema.index({ shoeName: 'text', brand: 'text' });
+
 const Sneaker =
   (mongoose.models.Sneaker as mongoose.Model<ISneaker>) ||
   mongoose.model<ISneaker>('Sneaker', SneakerSchema);

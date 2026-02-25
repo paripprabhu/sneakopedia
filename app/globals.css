@@ -29,3 +29,14 @@ body {
   background-size: 400% 400%;
   animation: holo 3s ease infinite;
 }
+
+@keyframes social-slide-in {
+  0% { transform: translateY(-50px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.social-icon:hover svg {
+  animation: social-slide-in 0.3s both;
+}
+.social-icon:active {
+  transform: scale(0.9);
+}
