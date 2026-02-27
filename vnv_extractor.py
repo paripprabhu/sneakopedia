@@ -29,6 +29,76 @@ HEADERS       = {
 # VNV sitemap uses standard sitemap namespace
 NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 
+# ── Non-shoe filter ───────────────────────────────────────────────────────────
+# VegNonVeg sells apparel, accessories, and collectibles alongside footwear.
+# These lists filter out non-shoe URLs so the output contains only footwear.
+
+# Words that appear as standalone tokens in the slug (split by -)
+_NON_SHOE_EXACT = {
+    # Tops
+    "tee", "shirt", "hoodie", "hoody", "sweatshirt", "crewneck", "polo",
+    "cardigan", "sweater", "jumper", "fleece", "vest", "bralet", "bralette",
+    "pullover", "jersey",
+    # Bottoms
+    "pant", "pants", "legging", "jogger", "sweatpant", "short", "shorts",
+    # Outerwear
+    "jacket", "jackets", "windbreaker", "anorak", "coat", "parka", "raincoat",
+    # Dresses / skirts / swimwear
+    "dress", "skirt", "romper", "overall", "bodysuit", "swimsuit", "swimwear",
+    # Headwear
+    "beanie", "bonnet",
+    # Misc non-shoe
+    "towel", "globe",
+}
+
+# Substrings that always indicate non-footwear
+_NON_SHOE_SUBSTR = (
+    # Headwear
+    "-cap-", "bucket-hat", "trucker-cap", "snapback", "dad-hat", "-hat-",
+    # Laces / insoles / care
+    "shoelace", "flat-lace", "-lace-mid", "-laces-", "insole",
+    "-spray", "-wipes-", "-wipe-", "cleaning-towel", "microfiber",
+    # Bags
+    "-bag-", "tote-bag", "duffel", "waistpack", "backpack", "fanny",
+    # Socks
+    "-sock-", "-socks-", "ankle-sock",
+    # Apparel item codes (Nike / Adidas internal)
+    "as-m-", "as-w-", "as-lbj-", "as-kd-",
+    # Specific apparel short patterns safe to filter (not shoe colorways)
+    "basketball-short", "diamond-short", "terry-short", "denim-short",
+    "jersey-short", "mesh-short", "nylon-short", "cargo-short", "camo-short",
+    "woven-short", "fleece-short", "knit-short", "sport-short",
+    # Outerwear compounds
+    "bomber", "tracktop", "track-top", "track-jacket",
+    # Swimwear compounds
+    "one-piece", "swim-short", "board-short",
+    # Collectibles
+    "blind-box", "bearbrick", "snow-globe",
+)
+
+# Slug prefixes that are always non-shoe
+_APPAREL_PREFIXES = (
+    "as-m-", "as-w-", "as-lbj-", "nk-heritage-", "nk-club-", "nk-nsw-",
+)
+
+# Slug suffixes that are always non-shoe
+_NON_SHOE_SUFFIXES = ("-cap", "-socks", "-sock", "-bag", "-hat")
+
+
+def _is_non_shoe(slug: str) -> bool:
+    """Return True if the product slug is clearly not a shoe."""
+    s = slug.lower()
+    if s.startswith(_APPAREL_PREFIXES):
+        return True
+    if s.endswith(_NON_SHOE_SUFFIXES):
+        return True
+    words = set(s.replace("_", "").split("-"))
+    if words & _NON_SHOE_EXACT:
+        return True
+    return any(kw in s for kw in _NON_SHOE_SUBSTR)
+
+# ─────────────────────────────────────────────────────────────────────────────
+
 
 def fetch_xml(url, retries=3):
     """Fetch a URL and return parsed ElementTree root, or None on failure."""
@@ -96,24 +166,31 @@ def main():
         all_urls.extend(urls)
         time.sleep(0.5)  # polite pause between requests
 
-    # Deduplicate while preserving order
+    # Deduplicate while preserving order, filtering non-footwear
     seen = set()
     unique_urls = []
+    filtered_out = 0
     for u in all_urls:
-        if u not in seen:
-            seen.add(u)
-            unique_urls.append(u)
+        if u in seen:
+            continue
+        seen.add(u)
+        slug = u.split("/products/")[-1].split("?")[0]
+        if _is_non_shoe(slug):
+            filtered_out += 1
+            continue
+        unique_urls.append(u)
 
     # Write output file
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-        f.write(f"# VegNonVeg product URLs — extracted from sitemap\n")
-        f.write(f"# {len(unique_urls)} products total\n")
+        f.write(f"# VegNonVeg footwear URLs — extracted from sitemap\n")
+        f.write(f"# {len(unique_urls)} sneaker/footwear products (filtered out {filtered_out} non-shoe items)\n")
         f.write(f"# To scrape: run sneaker_bot.py and paste '{OUTPUT_FILE}'\n\n")
         for url in unique_urls:
             f.write(url + "\n")
 
     print(f"\n{'=' * 55}")
-    print(f"  ✅ Done — {len(unique_urls)} unique product URLs")
+    print(f"  ✅ Done — {len(unique_urls)} footwear URLs")
+    print(f"  Filtered out: {filtered_out} non-shoe items")
     print(f"  Saved to: {OUTPUT_FILE}")
     print(f"\n  To scrape: run sneaker_bot.py and paste '{OUTPUT_FILE}'")
     print(f"{'=' * 55}\n")
