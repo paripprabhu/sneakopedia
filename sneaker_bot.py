@@ -19,7 +19,7 @@ try:
     from pymongo import MongoClient, UpdateOne
     if MONGODB_URI:
         _client = MongoClient(MONGODB_URI)
-        mongo_col = _client["test"]["sneakers"]  # same db/collection as the app
+        mongo_col = _client["sneakopedia"]["sneakers"]  # same db/collection as the app
         print(f"✅ MongoDB connected.")
     else:
         print("⚠️  MONGODB_URI not set — will save to file only.")
@@ -71,15 +71,64 @@ def _parse_price_str(raw):
         pass
     return 0
 
+def extract_gtm_product(driver):
+    """
+    Extract full product data from Google Tag Manager data layer scripts.
+    Pattern: var product = {"name":...,"price":...,"brand":...,"image":...}
+    Used by custom headless frontends (e.g. VegNonVeg) that don't expose
+    price in standard meta tags or JSON-LD.
+    Returns a dict with any of: name, price, brand, image — or {} if not found.
+    """
+    best = {}
+    try:
+        scripts = driver.find_elements(By.TAG_NAME, "script")
+        for script in scripts:
+            content = script.get_attribute('innerHTML') or ''
+            # Match: var product = { ... } or let googleProductViewed = { ... }
+            for m in re.finditer(
+                r'(?:var product|let google\w+)\s*=\s*(\{[^;]{20,2000}\})',
+                content, re.DOTALL
+            ):
+                try:
+                    data = json.loads(m.group(1))
+                except Exception:
+                    raw = re.sub(r',\s*([}\]])', r'\1', m.group(1))
+                    try:
+                        data = json.loads(raw)
+                    except Exception:
+                        continue
+
+                if isinstance(data, dict):
+                    if data.get('price') and not best.get('price'):
+                        p = _parse_price_str(str(data['price']))
+                        if p:
+                            best['price'] = p
+                    if data.get('name') and len(str(data['name'])) > 3 and not best.get('name'):
+                        best['name'] = str(data['name']).strip()
+                    if data.get('brand') and len(str(data['brand'])) > 1 and not best.get('brand'):
+                        best['brand'] = str(data['brand']).strip()
+                    if data.get('image') and str(data['image']).startswith('http') and not best.get('image'):
+                        best['image'] = str(data['image']).split('?')[0]
+    except Exception:
+        pass
+    return best
+
+
 def extract_price(driver):
     """
     Priority-based price extraction:
+      0. GTM data layer (custom headless frontends like VegNonVeg)
       1. JSON-LD Product offers.price  (most accurate)
       2. Meta product:price:amount / og:price:amount
       3. Shopify price CSS selectors
       4. Body text scan — EMI lines filtered out first
     Returns int rupees, or 0 if not found.
     """
+    # 0. GTM data layer (highest priority for custom frontends)
+    gtm = extract_gtm_product(driver)
+    if gtm.get('price'):
+        return gtm['price']
+
     # 1. JSON-LD
     try:
         scripts = driver.find_elements(By.CSS_SELECTOR, "script[type='application/ld+json']")
@@ -252,38 +301,62 @@ def extract_name(driver):
     return title.strip()
 
 
-def normalize_brand(text):
+def normalize_brand(text, url=""):
+    """
+    Detect brand from shoe name text + optional product URL.
+    URL-based detection handles D2C brands whose product names don't contain the brand name
+    (e.g. Comet sells "X Lows FLAMINGO", Thaely sells "Sneaker 01").
+    """
+    # --- URL/domain-based detection (highest priority for D2C brands) ---
+    url_lower = url.lower()
+    if 'wearcomet.com'    in url_lower: return 'Comet'
+    if 'thaely.com'       in url_lower: return 'Thaely'
+    if 'gullylabs.com'    in url_lower: return 'Gully Labs'
+    if 'gullylabs.in'     in url_lower: return 'Gully Labs'
+    if '7-10.in'          in url_lower: return '7-10'
+    if 'baccabucci.com'   in url_lower: return 'Bacca Bucci'
+
     text = text.lower()
-    # High Priority (Specific Collabs/Sub-brands first)
-    if 'yeezy' in text: return 'Yeezy'
-    if 'jordan' in text: return 'Jordan'
-    if 'on x loewe' in text: return 'On Running' # Group with On
-    if 'on running' in text or 'cloud' in text: return 'On Running'
-    if 'naked wolfe' in text: return 'Naked Wolfe'
-    if 'louis vuitton' in text: return 'Louis Vuitton'
-    if 'brooks' in text: return 'Brooks Running'
-    if 'new balance' in text: return 'New Balance'
-    if 'gully' in text: return 'Gully Labs'
-    if '7-10' in text: return '7-10'
 
-    # Standard Brands
-    if 'nike' in text: return 'Nike'
-    if 'adidas' in text: return 'Adidas'
-    if 'asics' in text: return 'Asics'
-    if 'anta' in text: return 'Anta'
-    if 'dior' in text: return 'Dior'
-    if 'fila' in text: return 'Fila'
-    if 'hoka' in text: return 'Hoka'
-    if 'li-ning' in text or 'lining' in text: return 'Li-Ning'
-    if 'onitsuka' in text: return 'Onitsuka Tiger'
-    if 'puma' in text: return 'Puma'
-    if 'salomon' in text: return 'Salomon'
-    if 'ugg' in text: return 'UGG'
-    if 'vans' in text: return 'Vans'
+    # --- Collabs / sub-brands (before parent brands) ---
+    if 'yeezy'            in text: return 'Yeezy'
+    if 'jordan'           in text: return 'Jordan'
+    if 'on x loewe'       in text: return 'On Running'
+    if 'naked wolfe'      in text: return 'Naked Wolfe'
+    if 'louis vuitton'    in text: return 'Louis Vuitton'
 
-    # Indian D2C / Others
-    if 'comet' in text: return 'Comet'
-    if 'crocs' in text: return 'Crocs'
+    # --- Global brands ---
+    if 'nike'             in text: return 'Nike'
+    if 'adidas'           in text: return 'Adidas'
+    if 'new balance'      in text: return 'New Balance'
+    if 'converse'         in text: return 'Converse'
+    if 'reebok'           in text: return 'Reebok'
+    if 'under armour'     in text: return 'Under Armour'
+    if 'asics'            in text: return 'Asics'
+    if 'anta'             in text: return 'Anta'
+    if 'brooks'           in text: return 'Brooks Running'
+    if 'dior'             in text: return 'Dior'
+    if 'fila'             in text: return 'Fila'
+    if 'hoka'             in text: return 'Hoka'
+    if 'li-ning'          in text: return 'Li-Ning'
+    if 'onitsuka'         in text: return 'Onitsuka Tiger'
+    if 'puma'             in text: return 'Puma'
+    if 'salomon'          in text: return 'Salomon'
+    if 'ugg'              in text: return 'UGG'
+    if 'vans'             in text: return 'Vans'
+    if 'crocs'            in text: return 'Crocs'
+    if 'on running'       in text: return 'On Running'
+
+    # Guard: "cloud" alone is too generic — only match if paired with "on" context
+    # (avoid false match on "Air Max Cloud" etc.)
+    if re.search(r'\bon cloud\b|\bcloudmonster\b|\bcloudnova\b|\bcloudflow\b', text):
+        return 'On Running'
+
+    # --- Indian D2C brands (text-based, when URL unavailable) ---
+    if 'comet'            in text: return 'Comet'
+    if 'thaely'           in text: return 'Thaely'
+    if 'gully'            in text: return 'Gully Labs'
+    if 'bacca bucci'      in text: return 'Bacca Bucci'
 
     return 'Streetwear'
 
@@ -293,27 +366,32 @@ def normalize_brand(text):
 def scrape_single_product(driver, url):
     """Scrapes a specific product page."""
     driver.get(url)
-    time.sleep(2)
+    time.sleep(5)
 
     try:
-        name  = extract_name(driver)
-        price = extract_price(driver)
+        # GTM data layer first — gives us name, price, brand, image in one shot
+        # for headless frontends (VegNonVeg, etc.) that don't use standard meta tags
+        gtm = extract_gtm_product(driver)
+
+        name  = gtm.get('name') or extract_name(driver)
+        price = gtm.get('price') or extract_price(driver)
 
         # --- IMAGE (Meta Strategy) ---
-        img_src = ""
-        try:
-            meta_img = driver.find_element(By.CSS_SELECTOR, "meta[property='og:image']")
-            img_src = meta_img.get_attribute("content")
-        except Exception:
+        img_src = gtm.get('image', "")
+        if not img_src:
             try:
-                imgs = driver.find_elements(By.TAG_NAME, "img")
-                for i in imgs:
-                    w = i.get_attribute("width")
-                    if w and int(w) > 400:
-                        img_src = i.get_attribute("src")
-                        break
+                meta_img = driver.find_element(By.CSS_SELECTOR, "meta[property='og:image']")
+                img_src = meta_img.get_attribute("content")
             except Exception:
-                pass
+                try:
+                    imgs = driver.find_elements(By.TAG_NAME, "img")
+                    for i in imgs:
+                        w = i.get_attribute("width")
+                        if w and int(w) > 400:
+                            img_src = i.get_attribute("src")
+                            break
+                except Exception:
+                    pass
 
         # Clean image URL
         if img_src and img_src.startswith("//"): img_src = "https:" + img_src
@@ -326,11 +404,15 @@ def scrape_single_product(driver, url):
         except Exception:
             source_domain = url
 
+        # GTM provides the canonical brand name (e.g. "ASICS") — use it if available
+        brand = gtm.get('brand') or normalize_brand(name, url=url)
+
         item = {
             "_id":         f"s_{random.randint(10000,99999)}_{int(time.time())}",
             "shoeName":    name,
-            "brand":       normalize_brand(name),
+            "brand":       brand,
             "retailPrice": price,
+            "currency":    "INR",
             "thumbnail":   img_src,
             "url":         url,
             "description": f"Sourced from {source_domain}",
@@ -351,14 +433,17 @@ def scrape_single_product(driver, url):
 # ==========================================
 # 5. COLLECTION SCRAPER
 # ==========================================
-def scrape_collection(driver, collection_url):
-    """Crawls a collection page, finds links, and scrapes them."""
+def scrape_collection(driver, collection_url, pages=None):
+    """Crawls a collection page, finds links, and scrapes them.
+    Pass pages= to skip the interactive prompt (useful for batch/test mode).
+    """
     print(f"\n--- 📦 DETECTED COLLECTION: {collection_url} ---")
 
-    try:
-        pages = int(input("   How many pages to scan? (e.g., 1, 2, 5): "))
-    except Exception:
-        pages = 1
+    if pages is None:
+        try:
+            pages = int(input("   How many pages to scan? (e.g., 1, 2, 5): "))
+        except Exception:
+            pages = 1
 
     all_product_links = []
 
@@ -394,26 +479,52 @@ def scrape_collection(driver, collection_url):
 # ==========================================
 # 6. MAIN EXECUTION
 # ==========================================
+def scrape_url_list(driver, urls):
+    """Scrape a pre-built list of product URLs. Used for batch file mode."""
+    print(f"\n🚀 BATCH MODE — {len(urls)} URLs queued")
+    results = []
+    for idx, url in enumerate(urls):
+        url = url.strip()
+        if not url or url.startswith("#"):
+            continue
+        print(f"   [{idx+1}/{len(urls)}] {url[:80]}")
+        data = scrape_single_product(driver, url)
+        if data:
+            results.append(data)
+        time.sleep(2)
+    return results
+
+
 def main():
     print("==========================================")
-    print("   SNEAKOPEDIA: HYBRID BOT V9.1")
+    print("   SNEAKOPEDIA: HYBRID BOT V9.2")
     print("==========================================")
+    print("   Tip: paste a .txt filename to scrape a list of URLs in batch.")
 
     driver = setup_driver()
 
     while True:
-        print("\nPaste LINK (Collection OR Product). Type 'exit' to stop.")
+        print("\nPaste LINK, .txt FILE, or Collection URL. Type 'exit' to stop.")
         url = input("🔗 > ").strip()
 
         if url.lower() in ['exit', 'quit']:
             break
 
-        if len(url) < 5: continue
+        if len(url) < 3: continue
 
         results = []
 
         # --- DECISION LOGIC ---
-        if "/collections/" in url or "/search" in url:
+        if url.endswith(".txt"):
+            # Batch file mode — each line is a product URL
+            try:
+                with open(url, "r", encoding="utf-8") as f:
+                    batch_urls = [l.strip() for l in f if l.strip() and not l.startswith("#")]
+                results = scrape_url_list(driver, batch_urls)
+            except FileNotFoundError:
+                print(f"   ❌ File not found: {url}")
+                continue
+        elif "/collections/" in url or "/search" in url:
             results = scrape_collection(driver, url)
         else:
             print("\n--- 👟 DETECTED SINGLE PRODUCT ---")
