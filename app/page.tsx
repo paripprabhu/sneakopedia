@@ -653,6 +653,17 @@ export default function Sneakopedia() {
     const brand = sneaker.brand?.toLowerCase() || '';
     const base  = sneaker.retailPrice;
 
+    // Build live retailer map from scraped retailerLinks (multi-retailer deduplication)
+    // Each entry is a direct product URL + actual scraped price for that store.
+    const liveLinks: Record<string, { url: string; price: number }> = {};
+    if (sneaker.retailerLinks?.length > 0) {
+      for (const entry of sneaker.retailerLinks) {
+        if (entry.retailer && entry.url && entry.price > 0) {
+          liveLinks[entry.retailer] = { url: entry.url, price: entry.price };
+        }
+      }
+    }
+
     // Map every known domain → retailer name
     const domainToRetailer: Record<string, string> = {
       'crepdogcrew.com':              'Crepdog Crew',
@@ -773,25 +784,37 @@ export default function Sneakopedia() {
 
     const links = getLinks(sneaker.shoeName, sneaker.brand);
 
-    // Helper: if we have a direct product URL from scraping and it matches this retailer, use it
-    const directUrl = (linkName: string) =>
-      sourceUrl && confirmedRetailer === linkName ? sourceUrl : undefined;
+    // Priority for URL: (1) scraped retailerLinks entry, (2) legacy single url field, (3) search URL
+    const resolveUrl = (linkName: string, searchUrl: string): string =>
+      liveLinks[linkName]?.url
+      ?? (sourceUrl && confirmedRetailer === linkName ? sourceUrl : searchUrl);
+
+    // Priority for price: (1) actual scraped price from retailerLinks, (2) estimated from multiplier
+    const resolvePrice = (linkName: string): number | null => {
+      if (liveLinks[linkName]) return liveLinks[linkName].price;
+      return availableAt.includes(linkName)
+        ? Math.round(base * (multipliers[linkName] ?? 1.0))
+        : null;
+    };
+
+    // A retailer is "live" if it appears in scraped retailerLinks OR is the legacy confirmed source
+    const liveRetailers = new Set([
+      ...Object.keys(liveLinks),
+      ...(confirmedRetailer ? [confirmedRetailer] : []),
+    ]);
 
     return {
       confirmedRetailer: confirmedRetailer ?? null,
+      liveRetailers,
       desi: links.desi.map((link: any) => ({
         ...link,
-        url: directUrl(link.name) ?? link.url,
-        price: availableAt.includes(link.name)
-          ? Math.round(base * (multipliers[link.name] ?? 1.0))
-          : null,
+        url:   resolveUrl(link.name, link.url),
+        price: resolvePrice(link.name),
       })),
       global: links.global.map((link: any) => ({
         ...link,
-        url: directUrl(link.name) ?? link.url,
-        price: availableAt.includes(link.name)
-          ? Math.round(base * (multipliers[link.name] ?? 1.0))
-          : null,
+        url:   resolveUrl(link.name, link.url),
+        price: resolvePrice(link.name),
       })),
     };
   };
@@ -1507,12 +1530,12 @@ export default function Sneakopedia() {
                     {/* PLATFORM PRICES */}
                     {(() => {
                       const prices = getPlatformPrices(selectedSneaker);
-                      const { confirmedRetailer } = prices;
+                      const { confirmedRetailer, liveRetailers } = prices;
 
                       const globalRetailers = new Set(['StockX', 'GOAT']);
 
                       const renderLink = (link: any, idx: number) => {
-                        const isLive = link.name === confirmedRetailer;
+                        const isLive = liveRetailers.has(link.name);
                         const isGlobal = globalRetailers.has(link.name);
 
                         // Global retailers (StockX, GOAT) are always shown as active links

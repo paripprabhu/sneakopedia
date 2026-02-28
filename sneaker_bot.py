@@ -3,6 +3,10 @@ import json
 import os
 import re
 import random
+import hashlib
+import unicodedata
+import datetime
+from urllib.parse import urlparse
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -25,6 +29,135 @@ try:
         print("⚠️  MONGODB_URI not set — will save to file only.")
 except ImportError:
     print("⚠️  pymongo not installed (pip install pymongo) — will save to file only.")
+
+# ==========================================
+# 2. DEDUPLICATION HELPERS
+# ==========================================
+
+_NOISE_WORDS = {
+    'the', 'and', 'with', 'for', 'by', 'in', 'a', 'an',
+    # Jordan-line: "Jordan 1 Retro High" == "Jordan 1 High" at Indian retailers
+    'retro',
+    # Size/age suffixes that some retailers append
+    'gs', 'ps', 'td', 'bp', 'preschool', 'gradeschool', 'toddler',
+}
+
+_BRAND_PREFIXES = [
+    r'^nike\s+', r'^adidas\s+', r'^new balance\s+', r'^jordan brand\s+',
+    r'^converse\s+', r'^reebok\s+', r'^asics\s+', r'^puma\s+',
+    r'^vans\s+', r'^on running\s+', r'^hoka one one\s+', r'^hoka\s+',
+    r'^salomon\s+', r'^ugg\s+',
+]
+
+_DOMAIN_TO_RETAILER = {
+    'crepdogcrew.com':              'Crepdog Crew',
+    'marketplace.mainstreet.co.in': 'Mainstreet',
+    'superkicks.in':                'Superkicks',
+    'vegnonveg.com':                'VegNonVeg',
+    'limitededt.in':                'LTD Edition',
+}
+
+
+def normalize_canonical(name: str) -> str:
+    """Return a stable lowercase ASCII key for matching the same shoe across retailers."""
+    s = unicodedata.normalize('NFKD', name).encode('ascii', 'ignore').decode('ascii')
+    s = s.lower()
+    for pat in _BRAND_PREFIXES:
+        s = re.sub(pat, '', s, count=1)
+    # Strip style codes like DH7138-006, FZ5112, 555088-101
+    s = re.sub(r'\b[a-z]{0,3}\d{4,6}(?:-\d{3})?\b', '', s)
+    s = re.sub(r'\([^)]*\)', '', s)   # strip (2015), (W)
+    s = re.sub(r'\[[^\]]*\]', '', s)  # strip [restock]
+    s = s.replace("'", '').replace('"', '')
+    s = re.sub(r'[^a-z0-9\s]', ' ', s)
+    s = re.sub(r'\s+', ' ', s).strip()
+    tokens = [t for t in s.split() if t and t not in _NOISE_WORDS]
+    return ' '.join(tokens)
+
+
+def make_canonical_id(canonical: str, brand: str) -> str:
+    """Deterministic MongoDB _id from canonical name + brand. Prefix 'c_' distinguishes
+    from legacy random 's_' IDs so old documents are never accidentally overwritten."""
+    key = f"{brand.lower().strip()}||{canonical}"
+    return 'c_' + hashlib.sha256(key.encode('utf-8')).hexdigest()[:16]
+
+
+def get_retailer_name(url: str) -> str:
+    """Map a product URL to its canonical retailer display name."""
+    try:
+        host = urlparse(url).hostname or ''
+        host = host.replace('www.', '')
+        for domain, name in _DOMAIN_TO_RETAILER.items():
+            if domain in host:
+                return name
+    except Exception:
+        pass
+    return 'Unknown'
+
+
+def save_to_mongo(results: list, col) -> None:
+    """
+    Upsert scraped items using canonicalName+brand as the match key.
+    Two-pass bulk_write: MongoDB forbids $pull and $push on the same field
+    in a single update, so we remove the stale retailer entry in pass 1
+    and insert the fresh entry in pass 2.
+    """
+    from pymongo import UpdateOne
+
+    pass1, pass2 = [], []
+    for item in results:
+        canonical = normalize_canonical(item['shoeName'])
+        if not canonical:
+            continue
+        doc_id   = make_canonical_id(canonical, item['brand'])
+        retailer = get_retailer_name(item['url'])
+        try:
+            source = urlparse(item['url']).hostname.replace('www.', '')
+        except Exception:
+            source = ''
+
+        link_doc = {
+            "retailer":  retailer,
+            "url":       item['url'],
+            "price":     item['retailPrice'],
+            "scrapedAt": datetime.datetime.utcnow(),
+            "source":    source,
+        }
+
+        # Pass 1: upsert document + pull stale retailer entry
+        pass1.append(UpdateOne(
+            {"_id": doc_id},
+            {
+                "$set": {
+                    "canonicalName": canonical,
+                    "brand":         item['brand'],
+                    "currency":      item.get('currency', 'INR'),
+                },
+                "$setOnInsert": {
+                    "_id":       doc_id,
+                    "shoeName":  item['shoeName'],
+                    "thumbnail": item.get('thumbnail', ''),
+                    "rand":      random.random(),
+                },
+                "$min": {"retailPrice": item['retailPrice']},
+                "$pull": {"retailerLinks": {"retailer": retailer}},
+            },
+            upsert=True,
+        ))
+
+        # Pass 2: push fresh retailer entry
+        pass2.append(UpdateOne(
+            {"_id": doc_id},
+            {"$push": {"retailerLinks": link_doc}},
+        ))
+
+    if pass1:
+        col.bulk_write(pass1, ordered=False)
+    if pass2:
+        res = col.bulk_write(pass2, ordered=False)
+        inserted = sum(1 for op in pass1 if op)  # approximate
+        print(f"✅ MongoDB: {res.modified_count} updated, {len(pass2)} retailer links written.")
+
 
 # ==========================================
 # 2. SETUP DRIVER
@@ -542,15 +675,10 @@ def main():
                     f.write(json_str + ",\n")
             print("✅ File saved.")
 
-            # Write to MongoDB if connected
+            # Write to MongoDB if connected (deduplicates by canonical shoe name)
             if mongo_col is not None:
                 print(f"📡 UPLOADING {len(results)} ITEMS TO MONGODB...")
-                ops = [
-                    UpdateOne({"_id": item["_id"]}, {"$set": item}, upsert=True)
-                    for item in results
-                ]
-                res = mongo_col.bulk_write(ops, ordered=False)
-                print(f"✅ MongoDB: {res.upserted_count} inserted, {res.modified_count} updated.")
+                save_to_mongo(results, mongo_col)
 
     driver.quit()
 
