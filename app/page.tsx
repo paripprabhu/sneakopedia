@@ -98,6 +98,7 @@ const getLinks = (sneakerName: string, brand: string) => {
       { name: "LTD Edition",  url: `https://limitededt.in/search?q=${baseQuery}` },
       { name: "Superkicks",   url: `https://www.superkicks.in/search?q=${baseQuery}` },
       { name: "Crepdog Crew", url: `https://crepdogcrew.com/search?q=${baseQuery}` },
+      { name: "Foot Locker",  url: `https://www.footlocker.co.in/search?searchTerm=${baseQuery}` },
     ],
     global: [
       // Size params removed — retailer search pages don't support them and return wrong/empty results
@@ -666,6 +667,7 @@ export default function Sneakopedia() {
       'gullylabs.com':                'Gully Labs',
       'seventen.in':                  '7-10 Official',
       'thaely.com':                   'Thaely Official',
+      'footlocker.co.in':             'Foot Locker',
     };
 
     // D2C retailers — if confirmed source is D2C, only show that store
@@ -685,17 +687,17 @@ export default function Sneakopedia() {
 
     // Static brand map — secondary layer for retailers not confirmed by data
     const brandMap: Record<string, string[]> = {
-      nike:            ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
-      jordan:          ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
-      adidas:          ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      nike:            ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'Foot Locker', 'StockX', 'GOAT'],
+      jordan:          ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'Foot Locker', 'StockX', 'GOAT'],
+      adidas:          ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'Foot Locker', 'StockX', 'GOAT'],
       yeezy:           ['VegNonVeg', 'LTD Edition', 'Crepdog Crew', 'StockX', 'GOAT'],
-      'new balance':   ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
-      asics:           ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
-      puma:            ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'StockX', 'GOAT'],
-      reebok:          ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
-      converse:        ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'StockX', 'GOAT'],
-      vans:            ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'StockX', 'GOAT'],
-      hoka:            ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      'new balance':   ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'Foot Locker', 'StockX', 'GOAT'],
+      asics:           ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'Foot Locker', 'StockX', 'GOAT'],
+      puma:            ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Foot Locker', 'StockX', 'GOAT'],
+      reebok:          ['Mainstreet', 'VegNonVeg', 'Superkicks', 'Foot Locker', 'StockX', 'GOAT'],
+      converse:        ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Foot Locker', 'StockX', 'GOAT'],
+      vans:            ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Foot Locker', 'StockX', 'GOAT'],
+      hoka:            ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'Foot Locker', 'StockX', 'GOAT'],
       'on running':    ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
       'on cloud':      ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
       salomon:         ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
@@ -712,25 +714,25 @@ export default function Sneakopedia() {
       'golden goose':  ['StockX', 'GOAT'],
       'maison mihara': ['StockX', 'GOAT'],
       'axel arigato':  ['StockX', 'GOAT'],
-      ugg:             ['VegNonVeg', 'LTD Edition', 'Superkicks', 'StockX', 'GOAT'],
-      fila:            ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
-      'under armour':  ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
-      skechers:        ['Mainstreet', 'VegNonVeg', 'Superkicks'],
+      ugg:             ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Foot Locker', 'StockX', 'GOAT'],
+      fila:            ['Mainstreet', 'VegNonVeg', 'Superkicks', 'Foot Locker', 'StockX', 'GOAT'],
+      'under armour':  ['Mainstreet', 'VegNonVeg', 'Superkicks', 'Foot Locker', 'StockX', 'GOAT'],
+      skechers:        ['Mainstreet', 'VegNonVeg', 'Superkicks', 'Foot Locker'],
       birkenstock:     ['VegNonVeg', 'LTD Edition', 'Superkicks', 'StockX', 'GOAT'],
-      timberland:      ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
+      timberland:      ['Mainstreet', 'VegNonVeg', 'Superkicks', 'Foot Locker', 'StockX', 'GOAT'],
       'dr. martens':   ['VegNonVeg', 'LTD Edition', 'Superkicks', 'StockX', 'GOAT'],
-      saucony:         ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      saucony:         ['VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'Foot Locker', 'StockX', 'GOAT'],
       mizuno:          ['VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
       'li-ning':       ['VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
       anta:            ['VegNonVeg', 'StockX', 'GOAT'],
-      crocs:           ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
+      crocs:           ['Mainstreet', 'VegNonVeg', 'Superkicks', 'Foot Locker', 'StockX', 'GOAT'],
       supreme:         ['LTD Edition', 'StockX', 'GOAT'],
       palace:          ['StockX', 'GOAT'],
       stussy:          ['LTD Edition', 'StockX', 'GOAT'],
       'travis scott':  ['StockX', 'GOAT'],
       ovo:             ['StockX', 'GOAT'],
       nocta:           ['LTD Edition', 'Crepdog Crew', 'StockX', 'GOAT'],
-      brooks:          ['Mainstreet', 'VegNonVeg', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'],
+      brooks:          ['Mainstreet', 'VegNonVeg', 'Superkicks', 'Crepdog Crew', 'Foot Locker', 'StockX', 'GOAT'],
       columbia:        ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
       merrell:         ['Mainstreet', 'VegNonVeg', 'Superkicks', 'StockX', 'GOAT'],
       // D2C — handled entirely by confirmedRetailer detection above
@@ -747,6 +749,7 @@ export default function Sneakopedia() {
       'LTD Edition':     1.02,
       'Superkicks':      1.00,
       'Crepdog Crew':    1.05,
+      'Foot Locker':     1.00,
       'Comet Official':  1.00,
       'Thaely Official': 1.00,
       'Gully Labs':      1.00,
@@ -757,7 +760,7 @@ export default function Sneakopedia() {
     // Build availableAt:
     // 1. If confirmed source is D2C → only that store
     // 2. Otherwise → brand map result (or all retailers if unmapped) + confirmed source merged in
-    const allRetailers = ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'StockX', 'GOAT'];
+    const allRetailers = ['Mainstreet', 'VegNonVeg', 'LTD Edition', 'Superkicks', 'Crepdog Crew', 'Foot Locker', 'StockX', 'GOAT'];
     let availableAt: string[];
 
     if (confirmedRetailer && d2cRetailers.has(confirmedRetailer)) {
