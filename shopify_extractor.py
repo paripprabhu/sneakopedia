@@ -40,7 +40,7 @@ STORES = {
     },
     "limitededt": {
         "name":    "Limited Edt",
-        "sitemap": "https://www.limitededt.com/sitemap.xml",
+        "sitemap": "https://limitededt.in/sitemap.xml",
         "output":  "limitededt_links.txt",
     },
 }
