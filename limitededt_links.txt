@@ -1,5 +1,5 @@
 # Limited Edt footwear URLs — extracted from Shopify sitemap
-# 855 sneaker/footwear products (filtered out 599 non-shoe items)
+# 868 sneaker/footwear products (filtered out 586 non-shoe items)
 # To scrape: run sneaker_bot.py and paste 'limitededt_links.txt'
 
 https://limitededt.in/products/nike-wmns-air-force-1-07-triple-white-dd8959-100
@@ -109,9 +109,13 @@ https://limitededt.in/products/wipes-pack-of-6
 https://limitededt.in/products/wmns-dunk-low-lx-team-red-croc
 https://limitededt.in/products/air-max-1-platinum-tint-obsidian
 https://limitededt.in/products/wmns-zoom-vomero-5-phantom
+https://limitededt.in/products/x-girl-crop-top-clementine
+https://limitededt.in/products/x-girl-crop-top-black
+https://limitededt.in/products/palomo-top-passionfruit
 https://limitededt.in/products/killshot-2-leather-black-sail-gum
 https://limitededt.in/products/killshot-2-leather-sail-oil-grey-gum
 https://limitededt.in/products/zoom-vomero-5-triple-black
+https://limitededt.in/products/blazer-low-platform-pale-ivory-saturn-gold
 https://limitededt.in/products/wmns-killshot-2-leather-black-sail-gum
 https://limitededt.in/products/p-6000-summit-white-pure-platinum
 https://limitededt.in/products/wmns-shox-r4-white-metallic
@@ -158,6 +162,7 @@ https://limitededt.in/products/wmns-jordan-1-low-metallic-silver
 https://limitededt.in/products/air-force-1-07-triple-black
 https://limitededt.in/products/wmns-air-force-1-07-nn-dusty-cactus
 https://limitededt.in/products/jordan-1-mid-reverse-panda
+https://limitededt.in/products/blazer-low-77-vintage-white-black
 https://limitededt.in/products/gs-jordan-3-retro-green-glow
 https://limitededt.in/products/agacspray-black-xs
 https://limitededt.in/products/wmns-air-vapormax-2023-flyknit-black
@@ -190,6 +195,7 @@ https://limitededt.in/products/obey-yin-yang-panthers-blk
 https://limitededt.in/products/obey-ripped-icon-blk
 https://limitededt.in/products/obey-eyes-icon-2-jet
 https://limitededt.in/products/soft-fruits-woven-bls
+https://limitededt.in/products/jason-markk-rtu-foam-bottle
 https://limitededt.in/products/ex89
 https://limitededt.in/products/flower-plush-gold
 https://limitededt.in/products/flower-cushion-silver
@@ -256,6 +262,7 @@ https://limitededt.in/products/sbtg-limited-edt-gel-kayano-14-monsoon-patrol-bla
 https://limitededt.in/products/dunk-low-retro-viotech
 https://limitededt.in/products/wmns-dunk-low-nn-black-rasberry
 https://limitededt.in/products/lebron-witness-8-ep-armory-navy-bicostal
+https://limitededt.in/products/dunk-low-retro-denim-turquoise
 https://limitededt.in/products/chuck-70-wedge-vanilla-white-black-red
 https://limitededt.in/products/chuck-70-pink-egret-black
 https://limitededt.in/products/chuck-70-stardust-lilac-egret-black
@@ -268,7 +275,6 @@ https://limitededt.in/products/wmns-dunk-low-premium-nn-football-grey
 https://limitededt.in/products/wmns-adilette-ayoon-off-white
 https://limitededt.in/products/adilette-22-crystal-white
 https://limitededt.in/products/wmns-campus-00s-wonder-quartz
-https://limitededt.in/products/wales-bonner-nylon-trackpants-night-brown
 https://limitededt.in/products/zoom-vomero-5-dark-stucco
 https://limitededt.in/products/air-max-dn-light-orewood-brown
 https://limitededt.in/products/wmns-v2k-run-summit-white-dark-obsidian
@@ -372,9 +378,11 @@ https://limitededt.in/products/5950-limited-edt-spg-le-17-navy
 https://limitededt.in/products/limited-edt-9fifty-batik-navy
 https://limitededt.in/products/limited-edt-9fifty-corduroy-logo-black
 https://limitededt.in/products/limited-edt-9fifty-corduroy-logo-blue
+https://limitededt.in/products/limited-edt-9fifty-jpn-wording-denim-navy
 https://limitededt.in/products/limited-edt-9fifty-logo-black-gold
 https://limitededt.in/products/limited-edt-9fifty-mesh-grey
 https://limitededt.in/products/limited-edt-9fifty-snakeskin-black
+https://limitededt.in/products/limited-edt-embroidered-denim-navy
 https://limitededt.in/products/kd-16-ep-basketball-shoes-black-bright-crimson
 https://limitededt.in/products/dunk-low-retro-dark-rey-midnight-navy
 https://limitededt.in/products/palermo-citrus-tangerine-flaxen
@@ -398,6 +406,7 @@ https://limitededt.in/products/superstar-ii-core-black-core-black-cloud-white
 https://limitededt.in/products/chuck-70-night-indigo-egret-black
 https://limitededt.in/products/one-star-academy-pro-out-of-the-blue-egret-black
 https://limitededt.in/products/one-star-pro-night-indigo-white-black
+https://limitededt.in/products/meridian-knit-top
 https://limitededt.in/products/urc42-silver-metallic
 https://limitededt.in/products/handball-spezial-ltblue-ftwwht-gum5
 https://limitededt.in/products/gel-1130-cement-grey-clay-grey
@@ -447,6 +456,7 @@ https://limitededt.in/products/wmns-handball-spezial-lucid-pink-white
 https://limitededt.in/products/chuck-70-high-ruffles-bows-black
 https://limitededt.in/products/chuck-70-low-glitter-purple
 https://limitededt.in/products/as-1-pro-codura-beach-stone-baritone-blue
+https://limitededt.in/products/sb-zoom-blazer-low-pro-gt-black-gum
 https://limitededt.in/products/japan-s-black-pale-oak
 https://limitededt.in/products/japan-s-piedmont-grey-pure-silver
 https://limitededt.in/products/wmns-japan-s-white-blue-fade
@@ -462,6 +472,8 @@ https://limitededt.in/products/jordan-1-low-summit-white-off-noir-rattan
 https://limitededt.in/products/x-coraline-ctas-ps
 https://limitededt.in/products/x-coraline-ctas-easyon-ps
 https://limitededt.in/products/p-6000-white-black-metallic-silver-black
+https://limitededt.in/products/sb-zoom-blazer-mid-black-white-white-white
+https://limitededt.in/products/sb-zoom-blazer-mid-pale-ivory-noble-red-silt-red-white
 https://limitededt.in/products/sb-zoom-janoski-og-blue-force-blue-force-summit-white-campfire-orange
 https://limitededt.in/products/wmns-air-force-1-07-nn-white-cannon
 https://limitededt.in/products/wmns-air-force-1-07-nn-white-guava-ice
@@ -491,6 +503,7 @@ https://limitededt.in/products/wmns-air-force-1-07-nn-white-oil-green
 https://limitededt.in/products/c1ty-street
 https://limitededt.in/products/c1ty-brownstone
 https://limitededt.in/products/c1ty-summit-white-fire-red-black
+https://limitededt.in/products/sb-zoom-blazer-low-pro-gt-black-gum-light-brown-white
 https://limitededt.in/products/samba-og-ftwwht-green-supcol
 https://limitededt.in/products/gazelle-indoor-better-scarlet-red-gum
 https://limitededt.in/products/handball-spezial-nindig-shanav-nindig
@@ -543,17 +556,18 @@ https://limitededt.in/products/550-white-red
 https://limitededt.in/products/550-sea-salt-grey
 https://limitededt.in/products/inhale-res-black-green-glare
 https://limitededt.in/products/inhale-res-black-red
-https://limitededt.in/products/tech-x-aop-relaxed-football-jerseyblack-aop
 https://limitededt.in/products/golf-wang-one-star-cc-slip-forget-me-not-egret
 https://limitededt.in/products/sb-air-max-ishod-wair-panda
 https://limitededt.in/products/sb-zoom-janoski-og-canvas-black-white
 https://limitededt.in/products/cecilie-bahnsen-gel-cumulus-16-floral-pack-glacier-grey-pure-silver
 https://limitededt.in/products/air-jordan-1-low-tokyo-bio-hack
 https://limitededt.in/products/flight-court-neapolitan
+https://limitededt.in/products/sb-blazer-low-pro-gt-light-british-tan-gum-yellow-dark-team-red
 https://limitededt.in/products/wmns-air-max-90-nn-prm-velvet-brown-particle-pink
 https://limitededt.in/products/wmns-field-general-phantom-gum-dark-brown-solar-flare
 https://limitededt.in/products/gazelle-indoor-blue-bird-cloud-white
 https://limitededt.in/products/jabbar-high-cloud-white-core-black
+https://limitededt.in/products/samba-og-cow-print
 https://limitededt.in/products/370-nb-navy
 https://limitededt.in/products/547-black
 https://limitededt.in/products/574-dark-alpine-green
@@ -567,8 +581,6 @@ https://limitededt.in/products/air-max-90-gradient
 https://limitededt.in/products/air-max-95-og-prm-pale-ivory-light-khaki-sail-university-red
 https://limitededt.in/products/wmns-air-superfly-metallic-gold-black-sport-turquoise-parachute-beige
 https://limitededt.in/products/wmns-air-superfly-metallic-silver-black
-https://limitededt.in/products/yona-tight-longsleeve-dusky-gray
-https://limitededt.in/products/yona-tight-longsleeve-lux-army
 https://limitededt.in/products/ctas-lift-sugar-berry-egret-sugar-berry
 https://limitededt.in/products/run-star-trainer-black-black-brown
 https://limitededt.in/products/run-star-trainer-park-red-vermillion-red-egret
@@ -598,6 +610,7 @@ https://limitededt.in/products/1906-eclipse-1906
 https://limitededt.in/products/9060-washed-burgundy
 https://limitededt.in/products/limited-edt-comet-x-lows-orchard-1
 https://limitededt.in/products/wmns-air-max-musedesert-sand-sand-drift-metallic-silver-metallic-pewter
+https://limitededt.in/products/brooklyn-womens-mesh-top-starfish-white
 https://limitededt.in/products/sl-72-rs-lucid-lemon
 https://limitededt.in/products/1906r-black
 https://limitededt.in/products/530-moonbeam
@@ -611,6 +624,7 @@ https://limitededt.in/products/327-dark-alpine-green
 https://limitededt.in/products/327-linen-with-hay
 https://limitededt.in/products/1906r-black-1
 https://limitededt.in/products/1906u-black
+https://limitededt.in/products/air-jordan-1-low-se-denim-turquoise-smokey-blue-red-stardust-light-stone
 https://limitededt.in/products/air-jordan-1-low-se-patent-varsity-red-black
 https://limitededt.in/products/air-jordan-1-mid-se-white-light-blue-grey-1
 https://limitededt.in/products/wmns-air-max-university-red-black
@@ -625,7 +639,6 @@ https://limitededt.in/products/gel-nyc-white-smoke-grey
 https://limitededt.in/products/gs-jordan-11-retro-barely-volt
 https://limitededt.in/products/wmns-air-force-1-07-cacao-wow-sanddrift
 https://limitededt.in/products/wmns-air-max-dn8-black-metallic
-https://limitededt.in/products/fenty-scarf-pale-plum-alpine-snow-x
 https://limitededt.in/products/speedcat-strawberry-burst-black
 https://limitededt.in/products/wmns-speedcat-ballet-pearlized-white-black
 https://limitededt.in/products/ae2-black-white-red
@@ -654,7 +667,7 @@ https://limitededt.in/products/ae2-blue-fusion-zero-metallic-lime-burst
 https://limitededt.in/products/18-east-gel-nimbus-10-1-canteen-abbey-stone
 https://limitededt.in/products/wmns-air-jordan-4-retro-hemp-lt-orewood-brown
 https://limitededt.in/products/wmns-air-max-95-se-burgundy-crush-mtlc-red-bronze
-https://limitededt.in/products/fenty-scarf-elektro-green-black
+https://limitededt.in/products/sb-zoom-blazer-mid-baroque-brown-black-baroque-brown
 https://limitededt.in/products/av-baselayer-betsca-black
 https://limitededt.in/products/elite-mei-miaou-silver-metallic-collegiate-navy-hazy-yellow
 https://limitededt.in/products/wmns-handball-spezial-sand-strata-preloved-brown-clear-sky

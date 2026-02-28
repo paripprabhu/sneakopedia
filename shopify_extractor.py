@@ -47,19 +47,21 @@ STORES = {
 
 # ── Non-shoe filter ───────────────────────────────────────────────────────────
 _NON_SHOE_EXACT = {
-    # tops
-    "tee", "tees", "shirt", "shirts", "hoodie", "hoodies", "sweatshirt",
-    "crewneck", "polo", "cardigan", "sweater", "jumper", "fleece", "vest",
-    "bralet", "pullover", "jersey",
+    # tops (incl. compound spellings)
+    "tee", "tees", "shirt", "shirts", "tshirt", "tshirts",
+    "hoodie", "hoodies", "sweatshirt", "crewneck", "polo", "cardigan",
+    "sweater", "jumper", "fleece", "vest", "bralet", "pullover", "jersey",
+    "longsleeve",
     # bottoms
     "pant", "pants", "legging", "leggings", "jogger", "joggers",
-    "sweatpant", "sweatpants", "short", "shorts", "jeans", "denim",
-    # outerwear
-    "jacket", "jackets", "windbreaker", "anorak", "coat", "parka",
-    "raincoat", "blazer", "bomber",
+    "sweatpant", "sweatpants", "sweatshort", "sweatshorts",
+    "short", "shorts", "jeans", "trouser", "trousers",
+    "trackpant", "trackpants", "chino", "chinos",
+    # sets / outerwear
+    "tracksuit", "tracksuits",
+    "jacket", "jackets", "windbreaker", "anorak", "coat", "parka", "raincoat",
     # dresses / women
     "dress", "skirt", "romper", "bodysuit", "swimsuit", "swimwear",
-    "bra", "top", "tops",
     # headwear
     "cap", "caps", "hat", "hats", "beanie", "beanies", "bonnet",
     "headband", "bucket",
@@ -67,18 +69,19 @@ _NON_SHOE_EXACT = {
     "bag", "bags", "backpack", "tote", "pouch", "wallet", "purse",
     "keychain", "keyring", "lanyard", "belt", "belts",
     "glasses", "sunglasses", "goggles",
+    "scarf", "scarves", "glove", "gloves",
     # footwear accessories (not shoes themselves)
     "sock", "socks", "insole", "insoles", "laces", "lace",
     # care / cleaning
     "spray", "cleaner", "eraser", "brush", "wipe", "towel",
     "kit", "protector", "deodorizer",
     # collectibles / lifestyle
-    "figure", "toy", "doll", "poster", "print", "sticker",
-    "mug", "cup", "bottle", "tumbler", "blanket",
-    "umbrella", "phone", "case", "watch",
+    "figure", "toy", "doll", "poster", "sticker",
+    "mug", "tumbler", "blanket",
+    "umbrella", "watch",
     "candle", "diffuser",
     # misc
-    "giftcard", "gift-card", "voucher", "box",
+    "giftcard", "voucher",
 }
 
 _NON_SHOE_SUBSTR = (
@@ -94,10 +97,12 @@ _NON_SHOE_SUBSTR = (
     # care
     "-spray", "cleaning-towel", "microfiber", "crep-protect", "shoe-care",
     "laundry-bag",
-    # apparel substrings
-    "tracktop", "track-top", "track-jacket", "windbreaker",
+    # apparel substrings (compound words and phrases not caught by token split)
+    "tshirt", "t-shirt", "longsleeve", "long-sleeve",
+    "tracktop", "track-top", "track-jacket", "tracksuit", "windbreaker",
     "basketball-short", "terry-short", "diamond-short", "denim-short",
-    "sweat-short", "running-short",
+    "sweat-short", "running-short", "sweatshort",
+    "trouser", "jersey", "jerseyfan", "-jersey-", "football-jersey", "football-scarf",
     "one-piece", "bodysuit",
     # collectibles
     "blind-box", "bearbrick", "bear-brick", "kaws",
@@ -108,7 +113,7 @@ _NON_SHOE_SUBSTR = (
     "gift-card", "e-gift", "voucher",
     # accessories
     "-keychain", "-keyring", "-wallet", "-watch",
-    "phone-case", "-tumbler", "-mug", "-bottle",
+    "phone-case", "-tumbler", "-mug",
     "-umbrella", "-poster", "-sticker",
 )
 
@@ -123,6 +128,12 @@ _NON_SHOE_SUFFIXES = (
     "-tee", "-hoodie", "-jacket", "-shorts", "-pant", "-pants",
     "-jersey", "-polo", "-vest", "-laces", "-insole",
     "-spray", "-kit", "-brush",
+    "-blazer",          # jacket blazer (≠ Nike Blazer which has -mid/-low after)
+    "-tshirt",          # compound tshirt suffix
+    "-trouser", "-trousers",
+    "-scarf", "-gloves", "-glove",
+    "-tracksuit", "-trackpant", "-trackpants",
+    "-longsleeve",
 )
 
 
@@ -188,8 +199,15 @@ def get_product_sitemaps(root_sitemap_url: str) -> list[str]:
     return [loc for loc in locs if "sitemap_products_" in loc]
 
 
+_IMAGE_EXTS = (".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg", ".avif")
+
 def extract_product_urls(product_sitemap_url: str) -> list[str]:
-    """Fetch a Shopify product sub-sitemap and return all /products/ URLs."""
+    """Fetch a Shopify product sub-sitemap and return all /products/ page URLs.
+
+    Shopify sitemaps embed <image:loc> CDN image URLs inside <url> blocks.
+    Those also contain '/products/' in the path, so we must filter them out
+    by excluding cdn.shopify.com URLs and any URL ending with an image extension.
+    """
     data = _fetch(product_sitemap_url)
     if not data:
         return []
@@ -197,7 +215,12 @@ def extract_product_urls(product_sitemap_url: str) -> list[str]:
     if root is None:
         return []
     locs = [e.text.strip() for e in root.iter() if e.tag.endswith("loc") and e.text]
-    return [loc for loc in locs if "/products/" in loc]
+    return [
+        loc for loc in locs
+        if "/products/" in loc
+        and "cdn.shopify.com" not in loc
+        and not loc.lower().endswith(_IMAGE_EXTS)
+    ]
 
 
 # ── Per-store extraction ──────────────────────────────────────────────────────

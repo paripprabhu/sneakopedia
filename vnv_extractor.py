@@ -35,18 +35,25 @@ NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 
 # Words that appear as standalone tokens in the slug (split by -)
 _NON_SHOE_EXACT = {
-    # Tops
-    "tee", "shirt", "hoodie", "hoody", "sweatshirt", "crewneck", "polo",
+    # Tops (incl. compound spellings)
+    "tee", "tees", "shirt", "shirts", "tshirt", "tshirts",
+    "hoodie", "hoody", "hoodies", "sweatshirt", "crewneck", "polo",
     "cardigan", "sweater", "jumper", "fleece", "vest", "bralet", "bralette",
-    "pullover", "jersey",
+    "pullover", "jersey", "longsleeve",
     # Bottoms
-    "pant", "pants", "legging", "jogger", "sweatpant", "short", "shorts",
-    # Outerwear
+    "pant", "pants", "legging", "leggings", "jogger", "joggers",
+    "sweatpant", "sweatpants", "sweatshort", "sweatshorts",
+    "short", "shorts", "trouser", "trousers",
+    "trackpant", "trackpants", "chino", "chinos",
+    # Sets / outerwear
+    "tracksuit", "tracksuits",
     "jacket", "jackets", "windbreaker", "anorak", "coat", "parka", "raincoat",
     # Dresses / skirts / swimwear
     "dress", "skirt", "romper", "overall", "bodysuit", "swimsuit", "swimwear",
     # Headwear
-    "beanie", "bonnet",
+    "beanie", "beanies", "bonnet", "headband",
+    # Accessories
+    "scarf", "scarves", "glove", "gloves",
     # Misc non-shoe
     "towel", "globe",
 }
@@ -64,6 +71,10 @@ _NON_SHOE_SUBSTR = (
     "-sock-", "-socks-", "ankle-sock",
     # Apparel item codes (Nike / Adidas internal)
     "as-m-", "as-w-", "as-lbj-", "as-kd-",
+    # Compound apparel words not caught by token split
+    "tshirt", "t-shirt", "longsleeve", "long-sleeve",
+    "tracksuit", "trouser", "sweatshort",
+    "jersey", "jerseyfan", "football-jersey", "football-scarf",
     # Specific apparel short patterns safe to filter (not shoe colorways)
     "basketball-short", "diamond-short", "terry-short", "denim-short",
     "jersey-short", "mesh-short", "nylon-short", "cargo-short", "camo-short",
@@ -82,7 +93,13 @@ _APPAREL_PREFIXES = (
 )
 
 # Slug suffixes that are always non-shoe
-_NON_SHOE_SUFFIXES = ("-cap", "-socks", "-sock", "-bag", "-hat")
+_NON_SHOE_SUFFIXES = (
+    "-cap", "-socks", "-sock", "-bag", "-hat",
+    "-tshirt", "-trouser", "-trousers",
+    "-scarf", "-gloves", "-glove",
+    "-tracksuit", "-trackpant", "-trackpants",
+    "-longsleeve",
+)
 
 
 def _is_non_shoe(slug: str) -> bool:
@@ -92,7 +109,7 @@ def _is_non_shoe(slug: str) -> bool:
         return True
     if s.endswith(_NON_SHOE_SUFFIXES):
         return True
-    words = set(s.replace("_", "").split("-"))
+    words = set(s.replace("_", "-").split("-"))
     if words & _NON_SHOE_EXACT:
         return True
     return any(kw in s for kw in _NON_SHOE_SUBSTR)

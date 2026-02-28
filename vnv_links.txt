@@ -1,5 +1,5 @@
 # VegNonVeg footwear URLs — extracted from sitemap
-# 7155 sneaker/footwear products (filtered out 3318 non-shoe items)
+# 7081 sneaker/footwear products (filtered out 3392 non-shoe items)
 # To scrape: run sneaker_bot.py and paste 'vnv_links.txt'
 
 https://www.vegnonveg.com/products/puma-palermo-leather-puma-whitevapor-gray-clyde-royal
@@ -14,7 +14,6 @@ https://www.vegnonveg.com/products/nike-nike-c1ty-light-armyblack-cargo-khaki
 https://www.vegnonveg.com/products/jordan-flight-court-whiteblack-sail
 https://www.vegnonveg.com/products/nike-air-max-moto-2k-whitepink-spell-metallic-silver-black
 https://www.vegnonveg.com/products/nike-sb-zoom-blazer-mid-blackwhite
-https://www.vegnonveg.com/products/sporty-rich-src-ribbed-trouser-dark-navy
 https://www.vegnonveg.com/products/nike-c1ty-pure-platinumsail-wolf-grey-cool-grey
 https://www.vegnonveg.com/products/new-balance-1906-metallic-silver
 https://www.vegnonveg.com/products/jordan-air-jordan-1-low-sailfire-red-college-grey-hemp
@@ -43,7 +42,6 @@ https://www.vegnonveg.com/products/adidas-originals-samba-og-better-scarletwhite
 https://www.vegnonveg.com/products/adidas-originals-samba-og-bluewhite-gum
 https://www.vegnonveg.com/products/adidas-originals-jabbar-lo-supplier-colouroff-white-gold-metallic
 https://www.vegnonveg.com/products/adidas-originals-samba-og-maroonoff-white-gum
-https://www.vegnonveg.com/products/adidas-originals-essentials-ribbed-flared-leggings-black
 https://www.vegnonveg.com/products/adidas-originals-samba-og-core-blackwonder-white-silver-metallic
 https://www.vegnonveg.com/products/vegnonveg-crease-wash-jorts-black
 https://www.vegnonveg.com/products/vegnonveg-skorts-beige
@@ -52,8 +50,6 @@ https://www.vegnonveg.com/products/vegnonveg-barrel-leg-jeans-mid-blue
 https://www.vegnonveg.com/products/vegnonveg-barrel-leg-jeans-slate-grey
 https://www.vegnonveg.com/products/vegnonveg-denim-gharara-black
 https://www.vegnonveg.com/products/vegnonveg-denim-gharara-grey
-https://www.vegnonveg.com/products/vegnonveg-long-sleeve-top-black
-https://www.vegnonveg.com/products/vegnonveg-long-sleeve-top-green
 https://www.vegnonveg.com/products/vegnonveg-crease-wash-gilet-black
 https://www.vegnonveg.com/products/vegnonveg-crease-wash-gilet-blue
 https://www.vegnonveg.com/products/jordan-air-jordan-1-mid-saillight-madder-root-muslin
@@ -165,8 +161,6 @@ https://www.vegnonveg.com/products/puma-f1-inhale-75-yrs-puma-blackpop-red
 https://www.vegnonveg.com/products/puma-talon-og-lime-pow
 https://www.vegnonveg.com/products/puma-mostro-og-prime-pele-yellowpuma-black
 https://www.vegnonveg.com/products/puma-x-squid-game-palermo-puma-navybright-melon
-https://www.vegnonveg.com/products/gramicci-thermal-insulation-quilted-scarf-deep-laurel
-https://www.vegnonveg.com/products/gramicci-thermal-insulation-quilted-scarf-sandstone
 https://www.vegnonveg.com/products/gramicci-compass-keyring-zig-zag
 https://www.vegnonveg.com/products/new-balance-bb550-sea-saltgrey
 https://www.vegnonveg.com/products/new-balance-bb550-whitegreen
@@ -386,7 +380,6 @@ https://www.vegnonveg.com/products/birkenstock-boston-soft-footbed-suede-leather
 https://www.vegnonveg.com/products/birkenstock-arizona-eva-roast
 https://www.vegnonveg.com/products/birkenstock-boston-big-buckle-sandcastle
 https://www.vegnonveg.com/products/birkenstock-arizona-eva-big-buckle-mauve
-https://www.vegnonveg.com/products/puma-x-fenty-scarf-pale-plumalpine-snow
 https://www.vegnonveg.com/products/puma-x-la-france-rnr-reflection-flat-light-graysunset-glow-yellow-alert
 https://www.vegnonveg.com/products/puma-x-ripndip-inverse-puma-silver-fluro-green-pes
 https://www.vegnonveg.com/products/puma-speedcat-ballet-pearlized-puma-whitepuma-black
@@ -460,7 +453,6 @@ https://www.vegnonveg.com/products/universal-how-to-dismantle-an-atomic-u2-multi
 https://www.vegnonveg.com/products/universal-under-a-blood-red-sky-u2-multicolor
 https://www.vegnonveg.com/products/universal-youngblood-5-seconds-of-summer-multicolor
 https://www.vegnonveg.com/products/universal-songs-of-innocence-u2-multicolor
-https://www.vegnonveg.com/products/puma-x-asap-rocky-leather-glove-puma-black-fierce-red-puma-white
 https://www.vegnonveg.com/products/puma-mostro-og-wild-berrypuma-silver
 https://www.vegnonveg.com/products/puma-palermo-elevata-leather-puma-whitegum
 https://www.vegnonveg.com/products/puma-suede-moccasin-brandychocotart
@@ -484,11 +476,8 @@ https://www.vegnonveg.com/products/adidas-originals-tokyo-core-blackfootwear-whi
 https://www.vegnonveg.com/products/adidas-originals-tokyo-silver-metalliccream-white-gold-metallic
 https://www.vegnonveg.com/products/adidas-originals-tokyo-redsilver-metallic-gum
 https://www.vegnonveg.com/products/y-3-belt-black
-https://www.vegnonveg.com/products/y-3-gloves-black
-https://www.vegnonveg.com/products/adidas-originals-og-la-sweatpants-black
 https://www.vegnonveg.com/products/adidas-originals-ae-2-blue-fusionzero-metallic-lime-burst
 https://www.vegnonveg.com/products/adidas-originals-ae-2-acid-orangecore-black-acid-red
-https://www.vegnonveg.com/products/vegnonveg-flytrap-scarf-green
 https://www.vegnonveg.com/products/nike-air-max-dn8-blackanthracite
 https://www.vegnonveg.com/products/jordan-air-jordan-1-low-se-denim-turqsmokey-blue-red-stardust
 https://www.vegnonveg.com/products/carhartt-wip-clip-belt-chrome-camo-combigreen
@@ -498,7 +487,6 @@ https://www.vegnonveg.com/products/carhartt-wip-vegas-cardholder-wild-dogsilver
 https://www.vegnonveg.com/products/carhartt-wip-tylor-belt-tobaccogold
 https://www.vegnonveg.com/products/carhartt-wip-camo-duck-keychain-black
 https://www.vegnonveg.com/products/carhartt-wip-expedition-mask-black
-https://www.vegnonveg.com/products/carhartt-wip-jacquard-striped-tony-scarf-palisanderglassy-pink
 https://www.vegnonveg.com/products/carhartt-wip-wild-dog-beware-plate-multicolor
 https://www.vegnonveg.com/products/carhartt-wip-theory-and-practice-4-color-ball-pen-blackwhite
 https://www.vegnonveg.com/products/carhartt-wip-helix-water-bottle-multicolor
@@ -551,8 +539,6 @@ https://www.vegnonveg.com/products/adidas-originals-handball-spezial-sand-strata
 https://www.vegnonveg.com/products/adidas-originals-predator-sala-wonder-aluminateam-victory-red-supplier-colour
 https://www.vegnonveg.com/products/adidas-ae-2-core-blackzero-metallic-lucid-red
 https://www.vegnonveg.com/products/adidas-originals-sl-72-rs-core-blackcream-white-gum
-https://www.vegnonveg.com/products/adidas-originals-x-avavav-fan-scarf-black
-https://www.vegnonveg.com/products/adidas-originals-x-avavav-fan-scarf-dark-blue
 https://www.vegnonveg.com/products/jordan-air-jordan-1-low-sailghost-coconut-milk
 https://www.vegnonveg.com/products/jordan-air-jordan-1-mid-blue-voidpure-platinum-summit-white
 https://www.vegnonveg.com/products/nike-sb-zoom-blazer-mid-baroque-brownblack
@@ -639,8 +625,6 @@ https://www.vegnonveg.com/products/vegnonveg-distressed-camo-trucker-black
 https://www.vegnonveg.com/products/vegnonveg-tank-top-white
 https://www.vegnonveg.com/products/vegnonveg-tank-top-sea-turtle
 https://www.vegnonveg.com/products/mnc-menace-issue-2-multicolor
-https://www.vegnonveg.com/products/vegnonveg-baggy-joggers-black
-https://www.vegnonveg.com/products/vegnonveg-baggy-joggers-grey
 https://www.vegnonveg.com/products/converse-x-naruto-chuck-taylor-all-star-high-pale-magmablack-egret
 https://www.vegnonveg.com/products/converse-x-naruto-chuck-taylor-all-star-high-fossilizedvintage-white
 https://www.vegnonveg.com/products/converse-x-naruto-chuck-taylor-all-star-cold-cement-high-ritual-rednatural-ivory-black
@@ -700,7 +684,6 @@ https://www.vegnonveg.com/products/carhartt-wip-3-one-3-bandana-blackwax
 https://www.vegnonveg.com/products/carhartt-wip-wild-dog-foldable-bowl-wild-dog-foldable-bowl
 https://www.vegnonveg.com/products/carhartt-wip-heart-folding-table-scarletwhite
 https://www.vegnonveg.com/products/carhartt-wip-heart-folding-table-blackwhite
-https://www.vegnonveg.com/products/nike-nike-sportswear-street-long-sleeve-body-bold-crop-top-blackchalk
 https://www.vegnonveg.com/products/jordan-air-jordan-1-low-neutral-greyblack-summit-white
 https://www.vegnonveg.com/products/nike-air-max-90-smoke-greyphoton-dust-black-dark-smoke-grey-light-smoke-grey
 https://www.vegnonveg.com/products/nike-air-max-90-whiteuniversity-red
@@ -1063,10 +1046,6 @@ https://www.vegnonveg.com/products/sonkei-dpurplcblackglored
 https://www.vegnonveg.com/products/ozweego-cblackcblackftwwht
 https://www.vegnonveg.com/products/nizza-high-w-ftwwhtcblacksilvmt
 https://www.vegnonveg.com/products/nizza-high-w-siggnrftwwhtcblack
-https://www.vegnonveg.com/products/vegnonveg-essential-joggers-black
-https://www.vegnonveg.com/products/vegnonveg-essential-joggers-grey
-https://www.vegnonveg.com/products/vegnonveg-essential-joggers-mustard
-https://www.vegnonveg.com/products/vegnonveg-essential-joggers-wine
 https://www.vegnonveg.com/products/rs-x-hard-drive-gray-violet-ultra-gray
 https://www.vegnonveg.com/products/future-rider-neon-play-puma-white-fusion-coral
 https://www.vegnonveg.com/products/ralph-sampson-mc-puma-white-gray-violet-whisper-white
@@ -1172,8 +1151,6 @@ https://www.vegnonveg.com/products/btsxfila-love-yourself-festivo-91-idol
 https://www.vegnonveg.com/products/btsxfila-love-yourself-festivo-91-idol-1_2
 https://www.vegnonveg.com/products/btsxfila-love-yourself-festivo-91-idol-1-2-3-4-5_6
 https://www.vegnonveg.com/products/btsxfila-love-yourself-drifter-dna
-https://www.vegnonveg.com/products/btsxfila-love-yourself-garment-dying-t-shirt_1
-https://www.vegnonveg.com/products/btsxfila-love-yourself-tape-series-t-shirt_1
 https://www.vegnonveg.com/products/air-jordan-5-retro-se
 https://www.vegnonveg.com/products/continental-80-w-ftwr-whitegold-metcore-black
 https://www.vegnonveg.com/products/superstar-w-ftwr-whiteftwr-whitesilver-met
@@ -1340,7 +1317,6 @@ https://www.vegnonveg.com/products/w-air-max-90-summit-whitemtlc-summit-wht
 https://www.vegnonveg.com/products/w-nike-dbreak-rtl-lt-orewood-brnmtlc-red-bronze-black
 https://www.vegnonveg.com/products/m-j-ss-ctn-jrdn-air-wrdmrk-blackinfrared-23
 https://www.vegnonveg.com/products/puma-face-mask-ii-set-of-2-puma-black-puma-black
-https://www.vegnonveg.com/products/puma-face-mask-ii-set-of-2-sunny-lime-fox-glove
 https://www.vegnonveg.com/products/puma-face-mask-ii-set-of-2-puma-blackignite-pink-puma-black
 https://www.vegnonveg.com/products/puma-face-mask-ii-set-of-2-mint-green-aop-puma-black
 https://www.vegnonveg.com/products/puma-face-mask-ii-set-of-2-firecracker-aop-puma-black
@@ -2483,9 +2459,6 @@ https://www.vegnonveg.com/products/nike-waffle-trainer-2-phantommalachite-white-
 https://www.vegnonveg.com/products/nike-air-max-97-se-iron-greyphantom-particle-grey-celery
 https://www.vegnonveg.com/products/nike-air-max-97-se-sesameelectro-purple-coconut-milk
 https://www.vegnonveg.com/products/blazer-mid-77-jumbo-whiteuniversity-blue-sail-black
-https://www.vegnonveg.com/products/vegnonveg-essential-joggers-unbleached
-https://www.vegnonveg.com/products/vegnonveg-essential-joggers-mint
-https://www.vegnonveg.com/products/vegnonveg-essential-joggers-grey_1
 https://www.vegnonveg.com/products/w-blazer-low-77-jumbo-whiteblack-white-sail
 https://www.vegnonveg.com/products/monkey-sign-bronze-statue-brown
 https://www.vegnonveg.com/products/bomb-hugger-bronze-statue-black
@@ -2811,7 +2784,6 @@ https://www.vegnonveg.com/products/atlas-sandal-fila-red-black-fila-red
 https://www.vegnonveg.com/products/sneaker-freaker-issue-46_1
 https://www.vegnonveg.com/products/yzy-700-mnvn-resin
 https://www.vegnonveg.com/products/u-j-everyday-max-ns-3pr-blackblackblack
-https://www.vegnonveg.com/products/puma-face-mask-w-headband-forest-night-peacoat
 https://www.vegnonveg.com/products/highart-magazine-by-highsnobiety-multicolor
 https://www.vegnonveg.com/products/quilted-crew-neck-black
 https://www.vegnonveg.com/products/ivp-ultraboost-og-shock-pinkreal-magentatrue-pink
@@ -3318,8 +3290,6 @@ https://www.vegnonveg.com/products/nike-air-max-scorpion-fk-wolf-greyvolt-wolf-g
 https://www.vegnonveg.com/products/kd15-ep-multi-colormulti-color
 https://www.vegnonveg.com/products/disruptor-ii-exp-white-diva-pink-scuba-blue
 https://www.vegnonveg.com/products/arizona-nu-desert-buck-burnt-clay
-https://www.vegnonveg.com/products/flared-leggings-wonder-white
-https://www.vegnonveg.com/products/aop-long-sleeve-black
 https://www.vegnonveg.com/products/aop-tight-black
 https://www.vegnonveg.com/products/forum-84-hi-ftwr-whiteoff-whiteclear-sky
 https://www.vegnonveg.com/products/forum-low-ftwr-whitepulse-blueftwr-white
@@ -3391,7 +3361,6 @@ https://www.vegnonveg.com/products/xc72-multi
 https://www.vegnonveg.com/products/xc72-sea-smoke-409
 https://www.vegnonveg.com/products/5740-pink-sand
 https://www.vegnonveg.com/products/5740-white
-https://www.vegnonveg.com/products/flared-leggings-green
 https://www.vegnonveg.com/products/centennial-85-hi-shadow-navycrystal-whitechalk-white
 https://www.vegnonveg.com/products/centennial-85-hi-off-whitechalk-whitewonder-white
 https://www.vegnonveg.com/products/campus-80s-collegiate-burgundyftwr-whiteoff-white
@@ -3635,21 +3604,6 @@ https://www.vegnonveg.com/products/hu-nmd-animal-print-ashmgsogrcblack
 https://www.vegnonveg.com/products/pw-knit-jrsy-pw-knit-jrsy
 https://www.vegnonveg.com/products/pw-knit-jrsy-semi-screaming-green
 https://www.vegnonveg.com/products/pw-knit-ls-jrsy-hazy-orange
-https://www.vegnonveg.com/products/campout-joggers-angel
-https://www.vegnonveg.com/products/campout-joggers-chains
-https://www.vegnonveg.com/products/campout-joggers-tribe
-https://www.vegnonveg.com/products/campout-joggers-snake-eyes
-https://www.vegnonveg.com/products/campout-joggers-bricks
-https://www.vegnonveg.com/products/campout-joggers-raging-tiger
-https://www.vegnonveg.com/products/campout-joggers-rani
-https://www.vegnonveg.com/products/campout-joggers-roohafza
-https://www.vegnonveg.com/products/campout-joggers-fuzzy-bunny
-https://www.vegnonveg.com/products/campout-joggers-paradise
-https://www.vegnonveg.com/products/campout-joggers-purple-rain
-https://www.vegnonveg.com/products/campout-joggers-very-gianni
-https://www.vegnonveg.com/products/campout-joggers-rococo
-https://www.vegnonveg.com/products/campout-joggers-brown-munde
-https://www.vegnonveg.com/products/campout-joggers-acid-trip
 https://www.vegnonveg.com/products/one-bb-sl-ss-clowhiclowhi
 https://www.vegnonveg.com/products/one-fl-sweat-p-metgrymetgry
 https://www.vegnonveg.com/products/one-fl-crew-clowhiclowhi
@@ -4719,7 +4673,6 @@ https://www.vegnonveg.com/products/air-jordan-1-retro-high-og-gs-blackroyal-blue
 https://www.vegnonveg.com/products/air-max-1-87-se-sailkhaki-coconut-milk-lt-orewood-brn-brown
 https://www.vegnonveg.com/products/air-force-1-07-lx-sailcoconut-milk-gum-med-brown-brown
 https://www.vegnonveg.com/products/y-3-cl-l-belt-black-black
-https://www.vegnonveg.com/products/y-3-printed-scarf-noble-purpletech-purple-purple
 https://www.vegnonveg.com/products/y-3-card-holder-black-black
 https://www.vegnonveg.com/products/y-3-phone-case-black-black
 https://www.vegnonveg.com/products/superstar-82-preloved-browngum4-brown
@@ -5330,8 +5283,6 @@ https://www.vegnonveg.com/products/ozgaia-cloud-whitegrey-one-white
 https://www.vegnonveg.com/products/ozgaia-putty-mauvecloud-white-white
 https://www.vegnonveg.com/products/crazy-iiinfinity-orbit-greychalk-white-wonder-white-white
 https://www.vegnonveg.com/products/x-camhicks-bb-4000-ii-chalk-white
-https://www.vegnonveg.com/products/nike-sportswear-asymmetrical-trouser-blacklight-iron-orewhite-black
-https://www.vegnonveg.com/products/nike-sportswear-asymmetrical-trouser-armory-navyglacier-bluewhite-blue
 https://www.vegnonveg.com/products/tech-woven-cargo-denim-turqblack-black
 https://www.vegnonveg.com/products/air-jordan-1-low-whitewolf-grey-midnight-navy-grey
 https://www.vegnonveg.com/products/jordan-hydro-iii-retro-summit-whitefire-red-cement-grey-black-white
@@ -5871,8 +5822,6 @@ https://www.vegnonveg.com/products/air-jordan-1-retro-low-og-whiteblack-game-roy
 https://www.vegnonveg.com/products/air-jordan-1-retro-low-og-gs-whiteblack-game-royal-sail-white
 https://www.vegnonveg.com/products/air-force-1-07-lx-sea-glasslight-iron-ore-cream
 https://www.vegnonveg.com/products/noodle-bowl-whiteblue-blue
-https://www.vegnonveg.com/products/palmer-scarf-camo-leo-jacquardtamarind-brown
-https://www.vegnonveg.com/products/scarf-green
 https://www.vegnonveg.com/products/anolak-mono-black
 https://www.vegnonveg.com/products/diamonds-dollars-wallet-khaki-brown
 https://www.vegnonveg.com/products/icecream-skateboards-trucker-blue-blue
@@ -5966,10 +5915,7 @@ https://www.vegnonveg.com/products/samba-og-whiteclear-orange-semi-coral-white
 https://www.vegnonveg.com/products/nike-dunk-low-pink-glazewhite-pomegranate
 https://www.vegnonveg.com/products/jordan-air-jordan-1-retro-high-og-whiteblack-varsity-red-sail
 https://www.vegnonveg.com/products/jordan-air-jordan-1-retro-high-og-whiteblack-varsity-red-sail_1
-https://www.vegnonveg.com/products/nike-nike-sportswear-long-sleeve-cropped-top-whiteblack
 https://www.vegnonveg.com/products/new-balance-327-olivine
-https://www.vegnonveg.com/products/adidas-originals-x-sporty-rich-trackpant-shadow-green
-https://www.vegnonveg.com/products/adidas-originals-x-sporty-rich-trackpant-maroon
 https://www.vegnonveg.com/products/asics-japan-s-whitedried-rose
 https://www.vegnonveg.com/products/asics-japan-s-whitemidnight
 https://www.vegnonveg.com/products/asics-gel-quantum-360-viii-emboss-dragon-fruitpink-glow
@@ -6019,7 +5965,6 @@ https://www.vegnonveg.com/products/carhartt-wip-jaden-keyholder-blackwhite
 https://www.vegnonveg.com/products/carhartt-wip-jake-shoulder-pouch-silver-pine
 https://www.vegnonveg.com/products/carhartt-wip-jake-shoulder-pouch-black
 https://www.vegnonveg.com/products/carhartt-wip-script-studs-belt-blacksilver
-https://www.vegnonveg.com/products/adidas-originals-off-shoulder-long-sleeve-top-black
 https://www.vegnonveg.com/products/adidas-originals-samba-og-core-whiteteam-victory-red-night-indigo
 https://www.vegnonveg.com/products/adidas-originals-samba-og-core-whiteteam-royal-blue-night-indigo
 https://www.vegnonveg.com/products/new-balance-530-moonbeam_1
@@ -6060,14 +6005,11 @@ https://www.vegnonveg.com/products/converse-chuck-70-ox-green-envyegret
 https://www.vegnonveg.com/products/converse-run-star-trainer-green-envyegretwhite
 https://www.vegnonveg.com/products/converse-run-star-trainer-bloodstoneegretwhite
 https://www.vegnonveg.com/products/converse-run-star-trainer-lotus-pinkegretwhite
-https://www.vegnonveg.com/products/adidas-originals-off-shoulder-long-sleeve-top-trace-brown
 https://www.vegnonveg.com/products/adidas-originals-superstar-ii-core-blackwhite_1
 https://www.vegnonveg.com/products/adidas-originals-campus-00s-whitenight-indigogold-metallic
 https://www.vegnonveg.com/products/puma-x-harry-potter-palermo-dark-crimsonyellow-sizzle
 https://www.vegnonveg.com/products/puma-x-harry-potter-palermo-2-dark-myrtlepuma-black
 https://www.vegnonveg.com/products/nike-sportswear-essential-ribbed-crop-tank-top-magic-emberhtrsail
-https://www.vegnonveg.com/products/nike-sportswear-phoenix-long-sleeve-top-jade-horizon
-https://www.vegnonveg.com/products/nike-sportswear-long-sleeve-cropped-top-blackblacksail
 https://www.vegnonveg.com/products/asics-japan-s-black
 https://www.vegnonveg.com/products/asics-japan-s-whiterust-orange
 https://www.vegnonveg.com/products/asics-gel-1130-cement-greyclay-grey
@@ -6107,7 +6049,6 @@ https://www.vegnonveg.com/products/converse-chuck-taylor-all-star-xx-high-blackn
 https://www.vegnonveg.com/products/adidas-originals-city-rnr-collegiate-greenwhite-off-white
 https://www.vegnonveg.com/products/shinyakozuka-picturesque-ojisan-embroidered-belt-coollective-colours
 https://www.vegnonveg.com/products/shinyakozuka-pantalon-with-dickies-colourless-black
-https://www.vegnonveg.com/products/shinyakozuka-school-girl-ish-trousers-treachers-black
 https://www.vegnonveg.com/products/adidas-originals-adilette-22-silver-pebbleshadow-olive-off-white
 https://www.vegnonveg.com/products/asics-x-h-beauty-youth-gel-kayano-14-piedmont-greywhite
 https://www.vegnonveg.com/products/jordan-deja-sandal-blackmetallic-gold
@@ -6189,8 +6130,6 @@ https://www.vegnonveg.com/products/new-balance-rc42-marsh-green-white
 https://www.vegnonveg.com/products/new-balance-574-sea-salt-white-green
 https://www.vegnonveg.com/products/asics-gt-2160-cement-grey
 https://www.vegnonveg.com/products/adidas-originals-campus-00s-clay-brownoff-white-halo-ivory
-https://www.vegnonveg.com/products/adidas-originals-x-avavav-headband-blackcream-white
-https://www.vegnonveg.com/products/adidas-originals-x-avavav-headband-better-scarletcream-white
 https://www.vegnonveg.com/products/nike-p-6000-whiteblack-metallic-silver
 https://www.vegnonveg.com/products/nike-air-max-90-cool-greywolf-grey-dusty-cactus-black
 https://www.vegnonveg.com/products/nike-air-max-90-whitecave-stone-light-bone
@@ -6619,14 +6558,8 @@ https://www.vegnonveg.com/products/nike-air-huarache-gripp-blackblack-black-whit
 https://www.vegnonveg.com/products/nike-air-max-90-essential-pure-platinum
 https://www.vegnonveg.com/products/nike-wmns-air-max-1-ultra-20-le-whiteuniversity-red
 https://www.vegnonveg.com/products/asics-tiger-x-atmos-gel-lyte-lll-world-map
-https://www.vegnonveg.com/products/vegnonveg-unisex-joggers-yellow
-https://www.vegnonveg.com/products/vegnonveg-unisex-joggers-white
-https://www.vegnonveg.com/products/vegnonveg-unisex-joggers-white_1
 https://www.vegnonveg.com/products/air-jordan-xxxiii-pf-blackdark-greywhite-noir
-https://www.vegnonveg.com/products/vegnonveg-unisex-street-joggers-black
-https://www.vegnonveg.com/products/vegnonveg-unisex-street-joggers-grey-melange
 https://www.vegnonveg.com/products/fila-fila-x-nbnw-capre-multicolour
-https://www.vegnonveg.com/products/vegnonveg-unisex-joggers-black
 https://www.vegnonveg.com/products/adidas-falcon-w-gold-metoff-white
 https://www.vegnonveg.com/products/reebok-classics-aztrek-bw-whiteblackexcellent-red
 https://www.vegnonveg.com/products/fila-orgfitlineker-blkwht
@@ -6686,7 +6619,6 @@ https://www.vegnonveg.com/products/vans-ward-canvas-sepia-rose
 https://www.vegnonveg.com/products/vans-ward-checkered-blacktrue-white
 https://www.vegnonveg.com/products/vans-wardflame-blackwhite
 https://www.vegnonveg.com/products/nike-air-force-max-whiteblack-multi-color
-https://www.vegnonveg.com/products/budx-nbnw-tracksuit
 https://www.vegnonveg.com/products/new-balance-997h-castlerock
 https://www.vegnonveg.com/products/nike-epic-react-flyknit-2-blackblack-white-gunsmoke
 https://www.vegnonveg.com/products/adidas-futurepacer-st-pale-nudecore-blackraw-amber
@@ -6755,7 +6687,6 @@ https://www.vegnonveg.com/products/puma-basket-heart-gen-hustle-wns-white-fair-a
 https://www.vegnonveg.com/products/puma-rs-x-reinvention-white-peach-bud
 https://www.vegnonveg.com/products/air-jordan-air-jordan-1-retro-high-og-blackcrimson-tint-white
 https://www.vegnonveg.com/products/fila-vegnonveg-masala-mindblower
-https://www.vegnonveg.com/products/fila-vegnonveg-product-tees-vb-masala
 https://www.vegnonveg.com/products/adidas-originals-nmd-r1-core-blackwhite
 https://www.vegnonveg.com/products/adidas-marvels-captain-america-n3xt-l3v3l
 https://www.vegnonveg.com/products/adidas-marvels-iron-manharden-vol-3
@@ -6974,7 +6905,6 @@ https://www.vegnonveg.com/products/adidas-originals-rivalry-low-ftwr-whitecream-
 https://www.vegnonveg.com/products/adidas-originals-supercourt-ftwr-whiteftwr-whitecrystal-white
 https://www.vegnonveg.com/products/stan-smith-ftwwhtftwwhtcrywht
 https://www.vegnonveg.com/products/superstar-ftwwhtftwwhtcrywht
-https://www.vegnonveg.com/products/utility-trousers-blackx-reflective
 https://www.vegnonveg.com/products/puma-cell-alien-ader-error-puma-white-puma-black
 https://www.vegnonveg.com/products/puma-aeon-sophia-webster-rose-gold
 https://www.vegnonveg.com/products/puma-cell-alien-karl-puma-black-turkish-sea
@@ -7096,12 +7026,10 @@ https://www.vegnonveg.com/products/nike-kyire-6-ep-oracle-aquablack-opti-yellow
 https://www.vegnonveg.com/products/reebok-classics-daytona-dmx-ii-whitestegryglablu
 https://www.vegnonveg.com/products/asics-tiger-gel-lyte-iii-og-whiteflash-coral_1
 https://www.vegnonveg.com/products/asics-tiger-gel-lyte-iii-og-whiteyellow_1
-https://www.vegnonveg.com/products/vegnonveg-shirt_1
 https://www.vegnonveg.com/products/nike-wmns-nike-court-vision-lo-prmv-whitenobel-red-iced-lilac
 https://www.vegnonveg.com/products/nike-nike-drop-type-hbr-whiteuniversity-red
 https://www.vegnonveg.com/products/nike-air-jordan-1-mid-blacknoble-red-white
 https://www.vegnonveg.com/products/jordan-jordan-hydro-8-gym-redblack-rouge-gymnoir
-https://www.vegnonveg.com/products/vegnonveg-oversized-tee_1
 https://www.vegnonveg.com/products/nike-lebron-witness-iv-ep-blackwhite-chile-red
 https://www.vegnonveg.com/products/ralph-sampson-mid-pumablk-gray-violet-pumawht
 https://www.vegnonveg.com/products/cali-sport-mix-wmns-puma-white-marshmallow
@@ -7128,7 +7056,6 @@ https://www.vegnonveg.com/products/one-star-leopard-sandal-desert-oreblackwhite
 https://www.vegnonveg.com/products/vltg-leather-overlay-blackuniversity-redrapid-teal
 https://www.vegnonveg.com/products/chuck-70-thunder-greyuniversity-redegret
 https://www.vegnonveg.com/products/adidas-originals-sl-andridge-w-chacornindigsyello
-https://www.vegnonveg.com/products/cut-sew-tee_1
 https://www.vegnonveg.com/products/authentic-black
 https://www.vegnonveg.com/products/authentic-blackblack
 https://www.vegnonveg.com/products/UA%20CLASSIC%20SLIP-ON%20%27Black%27
@@ -7139,7 +7066,6 @@ https://www.vegnonveg.com/products/old-skool-navy
 https://www.vegnonveg.com/products/old-skool-true-white
 https://www.vegnonveg.com/products/sk8-hi-blackblackwhite
 https://www.vegnonveg.com/products/sk8-hi-navy
-https://www.vegnonveg.com/products/unisex-plain-tee_1
 https://www.vegnonveg.com/products/veja-v12-bastille
 https://www.vegnonveg.com/products/veja-v10-suede-moonrock
 https://www.vegnonveg.com/products/veja-v10-extra-white
