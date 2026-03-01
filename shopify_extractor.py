@@ -82,6 +82,23 @@ _NON_SHOE_EXACT = {
     "candle", "diffuser",
     # misc
     "giftcard", "voucher",
+    # apparel not yet covered
+    "overshirt",                       # ls-overshirt, denim-overshirt, etc.
+    "jorts", "skorts",                 # VNV own-brand jean-shorts / skirt-shorts
+    "gilet",                           # VNV sleeveless jacket
+    "gharara",                         # VNV ethnic pant
+    "apron",                           # ASSC apron
+    # home / lifestyle
+    "rug", "rugs",                     # Virgil x IKEA rug, Pokemon TCG rug
+    "chair",                           # Urban Islander chair (LimitedEdt)
+    "cushion",                         # cushion cover (CDC)
+    "necklace",                        # tennis necklace (CDC)
+    "waistbag",                        # waist bag (VNV)
+    "keyholder",                       # key holder (VNV)
+    # food
+    "cookie", "cookies",               # Oreo collab items (Mainstreet)
+    # swimming
+    "swimshort", "swimshorts",
 }
 
 _NON_SHOE_SUBSTR = (
@@ -115,6 +132,41 @@ _NON_SHOE_SUBSTR = (
     "-keychain", "-keyring", "-wallet", "-watch",
     "phone-case", "-tumbler", "-mug",
     "-umbrella", "-poster", "-sticker",
+    # caps by model / brand name
+    "59fifty",                         # New Era 59Fifty cap model (FOG caps, LimitedEdt)
+    "new-era-",                        # New Era brand prefix for caps
+    "5-panel-hat",                     # 5-panel hat (Superkicks)
+    # collectibles
+    "funko-pop", "funko",              # Funko Pop figures (CDC)
+    "pokemon-tcg",                     # Pokemon TCG cards/rugs (LimitedEdt)
+    # home goods
+    "-rug",                            # rug items
+    "-apron",                          # aprons
+    "-cushion",                        # cushion covers
+    "-journal",                        # journals / books (LimitedEdt)
+    # accessories
+    "waist-bag",                       # hyphenated waist bag variant
+    "-necklace",                       # necklaces
+    "-keyholder",                      # key holders
+    # food
+    "oreo",                            # Oreo collab food items (Mainstreet)
+    # apparel substrings
+    "overshirt",                       # overshirt as compound word in slug
+    "sleeveless",                      # sleevelesstee (LimitedEdt)
+    "-swimshort",                      # swim shorts
+    # Puma collab apparel (VNV — compound words without hyphens)
+    "pumaxbatman", "pumaxgarfield", "pumaxamigraphic",
+    "rickandmorty", "harlemtee",
+    # branded bags / accessories
+    "longchamp",                       # Longchamp handbags (CDC)
+    "sprayground",                     # Sprayground bags (CDC)
+    "-handbag",                        # generic handbag suffix
+    # care products
+    "crep-cure",                       # Crep Cure shoe cleaner brand
+    "hat-care-kit",                    # hat care kit (VNV)
+    # misc
+    "pantalon",                        # pants (French collab, VNV)
+    "-bottle",                         # water bottles (VNV)
 )
 
 _APPAREL_PREFIXES = (
@@ -134,6 +186,11 @@ _NON_SHOE_SUFFIXES = (
     "-scarf", "-gloves", "-glove",
     "-tracksuit", "-trackpant", "-trackpants",
     "-longsleeve",
+    "-overshirt",                      # catches *-overshirt slugs
+    "-rug",
+    "-apron",
+    "-cushion",
+    "-necklace",
 )
 
 

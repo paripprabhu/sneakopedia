@@ -32,79 +32,163 @@ NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 # ── Non-shoe filter ───────────────────────────────────────────────────────────
 # VegNonVeg sells apparel, accessories, and collectibles alongside footwear.
 # These lists filter out non-shoe URLs so the output contains only footwear.
+# Kept in sync with shopify_extractor.py.
 
 # Words that appear as standalone tokens in the slug (split by -)
 _NON_SHOE_EXACT = {
-    # Tops (incl. compound spellings)
+    # tops (incl. compound spellings)
     "tee", "tees", "shirt", "shirts", "tshirt", "tshirts",
-    "hoodie", "hoody", "hoodies", "sweatshirt", "crewneck", "polo",
-    "cardigan", "sweater", "jumper", "fleece", "vest", "bralet", "bralette",
-    "pullover", "jersey", "longsleeve",
-    # Bottoms
+    "hoodie", "hoody", "hoodies", "sweatshirt", "crewneck", "polo", "cardigan",
+    "sweater", "jumper", "fleece", "vest", "bralet", "bralette", "pullover", "jersey",
+    "longsleeve",
+    # bottoms
     "pant", "pants", "legging", "leggings", "jogger", "joggers",
     "sweatpant", "sweatpants", "sweatshort", "sweatshorts",
-    "short", "shorts", "trouser", "trousers",
+    "short", "shorts", "jeans", "trouser", "trousers",
     "trackpant", "trackpants", "chino", "chinos",
-    # Sets / outerwear
+    # sets / outerwear
     "tracksuit", "tracksuits",
     "jacket", "jackets", "windbreaker", "anorak", "coat", "parka", "raincoat",
-    # Dresses / skirts / swimwear
-    "dress", "skirt", "romper", "overall", "bodysuit", "swimsuit", "swimwear",
-    # Headwear
-    "beanie", "beanies", "bonnet", "headband",
-    # Accessories
+    # dresses / women
+    "dress", "skirt", "romper", "bodysuit", "swimsuit", "swimwear",
+    # headwear
+    "cap", "caps", "hat", "hats", "beanie", "beanies", "bonnet",
+    "headband", "bucket",
+    # accessories
+    "bag", "bags", "backpack", "tote", "pouch", "wallet", "purse",
+    "keychain", "keyring", "lanyard", "belt", "belts",
+    "glasses", "sunglasses", "goggles",
     "scarf", "scarves", "glove", "gloves",
-    # Misc non-shoe
-    "towel", "globe",
+    # footwear accessories (not shoes themselves)
+    "sock", "socks", "insole", "insoles", "laces", "lace",
+    # care / cleaning
+    "spray", "cleaner", "eraser", "brush", "wipe", "towel",
+    "kit", "protector", "deodorizer",
+    # collectibles / lifestyle
+    "figure", "toy", "doll", "poster", "sticker",
+    "mug", "tumbler", "blanket",
+    "umbrella", "watch",
+    "candle", "diffuser",
+    # misc
+    "giftcard", "voucher",
+    # apparel not yet covered
+    "overshirt",                       # ls-overshirt, denim-overshirt, etc.
+    "jorts", "skorts",                 # VNV own-brand jean-shorts / skirt-shorts
+    "gilet",                           # VNV sleeveless jacket
+    "gharara",                         # VNV ethnic pant
+    "apron",                           # ASSC apron
+    # home / lifestyle
+    "rug", "rugs",                     # Virgil x IKEA rug, Pokemon TCG rug
+    "chair",                           # Urban Islander chair (LimitedEdt)
+    "cushion",                         # cushion cover (CDC)
+    "necklace",                        # tennis necklace (CDC)
+    "waistbag",                        # waist bag (VNV)
+    "keyholder",                       # key holder (VNV)
+    # food
+    "cookie", "cookies",               # Oreo collab items (Mainstreet)
+    # swimming
+    "swimshort", "swimshorts",
 }
 
 # Substrings that always indicate non-footwear
 _NON_SHOE_SUBSTR = (
-    # Headwear
-    "-cap-", "bucket-hat", "trucker-cap", "snapback", "dad-hat", "-hat-",
-    # Laces / insoles / care
-    "shoelace", "flat-lace", "-lace-mid", "-laces-", "insole",
-    "-spray", "-wipes-", "-wipe-", "cleaning-towel", "microfiber",
-    # Bags
-    "-bag-", "tote-bag", "duffel", "waistpack", "backpack", "fanny",
-    # Socks
-    "-sock-", "-socks-", "ankle-sock",
-    # Apparel item codes (Nike / Adidas internal)
-    "as-m-", "as-w-", "as-lbj-", "as-kd-",
-    # Compound apparel words not caught by token split
+    # caps / headwear
+    "-cap-", "-cap", "bucket-hat", "trucker-cap", "dad-cap", "snapback",
+    "-beanie", "five-panel",
+    # laces / insoles
+    "shoelace", "flat-lace", "-lace-", "-laces-", "-insole",
+    # bags
+    "-bag-", "-bag", "tote-bag", "duffel", "gym-bag", "carry-bag", "-backpack",
+    # socks
+    "-sock-", "-socks-", "-sock", "-socks", "ankle-sock", "crew-sock",
+    # care
+    "-spray", "cleaning-towel", "microfiber", "crep-protect", "shoe-care",
+    "laundry-bag",
+    # apparel substrings (compound words and phrases not caught by token split)
     "tshirt", "t-shirt", "longsleeve", "long-sleeve",
-    "tracksuit", "trouser", "sweatshort",
-    "jersey", "jerseyfan", "football-jersey", "football-scarf",
-    # Specific apparel short patterns safe to filter (not shoe colorways)
-    "basketball-short", "diamond-short", "terry-short", "denim-short",
-    "jersey-short", "mesh-short", "nylon-short", "cargo-short", "camo-short",
-    "woven-short", "fleece-short", "knit-short", "sport-short",
-    # Outerwear compounds
-    "bomber", "tracktop", "track-top", "track-jacket",
-    # Swimwear compounds
-    "one-piece", "swim-short", "board-short",
-    # Collectibles
-    "blind-box", "bearbrick", "snow-globe",
+    "tracktop", "track-top", "track-jacket", "tracksuit", "windbreaker",
+    "basketball-short", "terry-short", "diamond-short", "denim-short",
+    "sweat-short", "running-short", "sweatshort",
+    "trouser", "jersey", "jerseyfan", "-jersey-", "football-jersey", "football-scarf",
+    "one-piece", "bodysuit",
+    # collectibles
+    "blind-box", "bearbrick", "bear-brick", "kaws",
+    # Nike/Adidas internal apparel item codes
+    "as-m-", "as-w-", "as-lbj-", "as-kd-",
+    "nk-heritage-", "nk-club-", "nk-nsw-",
+    # gift / misc
+    "gift-card", "e-gift", "voucher",
+    # accessories
+    "-keychain", "-keyring", "-wallet", "-watch",
+    "phone-case", "-tumbler", "-mug",
+    "-umbrella", "-poster", "-sticker",
+    # caps by model / brand name
+    "59fifty",                         # New Era 59Fifty cap model
+    "new-era-",                        # New Era brand prefix for caps
+    "5-panel-hat",                     # 5-panel hat
+    # collectibles
+    "funko-pop", "funko",              # Funko Pop figures
+    "pokemon-tcg",                     # Pokemon TCG cards/rugs
+    # home goods
+    "-rug",                            # rug items
+    "-apron",                          # aprons
+    "-cushion",                        # cushion covers
+    "-journal",                        # journals / books
+    # accessories
+    "waist-bag",                       # hyphenated waist bag variant
+    "-necklace",                       # necklaces
+    "-keyholder",                      # key holders
+    # food
+    "oreo",                            # Oreo collab food items
+    # apparel substrings
+    "overshirt",                       # overshirt as compound word in slug
+    "sleeveless",                      # sleeveless tee
+    "-swimshort",                      # swim shorts
+    # Puma collab apparel (VNV — compound words without hyphens)
+    "pumaxbatman", "pumaxgarfield", "pumaxamigraphic",
+    "rickandmorty", "harlemtee",
+    # branded bags / accessories
+    "longchamp",                       # Longchamp handbags
+    "sprayground",                     # Sprayground bags
+    "-handbag",                        # generic handbag suffix
+    # care products
+    "crep-cure",                       # Crep Cure shoe cleaner brand
+    "hat-care-kit",                    # hat care kit
+    # misc
+    "pantalon",                        # pants (French collab)
+    "-bottle",                         # water bottles
 )
 
 # Slug prefixes that are always non-shoe
 _APPAREL_PREFIXES = (
-    "as-m-", "as-w-", "as-lbj-", "nk-heritage-", "nk-club-", "nk-nsw-",
+    "as-m-", "as-w-", "as-lbj-", "as-kd-",
+    "nk-heritage-", "nk-club-", "nk-nsw-",
+    "ua-", "ub-",
 )
 
 # Slug suffixes that are always non-shoe
 _NON_SHOE_SUFFIXES = (
-    "-cap", "-socks", "-sock", "-bag", "-hat",
-    "-tshirt", "-trouser", "-trousers",
+    "-cap", "-hat", "-socks", "-sock", "-bag", "-backpack",
+    "-tee", "-hoodie", "-jacket", "-shorts", "-pant", "-pants",
+    "-jersey", "-polo", "-vest", "-laces", "-insole",
+    "-spray", "-kit", "-brush",
+    "-blazer",                         # jacket blazer (≠ Nike Blazer which has -mid/-low after)
+    "-tshirt",
+    "-trouser", "-trousers",
     "-scarf", "-gloves", "-glove",
     "-tracksuit", "-trackpant", "-trackpants",
     "-longsleeve",
+    "-overshirt",                      # catches *-overshirt slugs
+    "-rug",
+    "-apron",
+    "-cushion",
+    "-necklace",
 )
 
 
 def _is_non_shoe(slug: str) -> bool:
     """Return True if the product slug is clearly not a shoe."""
-    s = slug.lower()
+    s = slug.lower().split("?")[0]
     if s.startswith(_APPAREL_PREFIXES):
         return True
     if s.endswith(_NON_SHOE_SUFFIXES):

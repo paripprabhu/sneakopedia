@@ -1,5 +1,5 @@
 # Limited Edt footwear URLs — extracted from Shopify sitemap
-# 868 sneaker/footwear products (filtered out 586 non-shoe items)
+# 859 sneaker/footwear products (filtered out 605 non-shoe items)
 # To scrape: run sneaker_bot.py and paste 'limitededt_links.txt'
 
 https://limitededt.in/products/nike-wmns-air-force-1-07-triple-white-dd8959-100
@@ -43,8 +43,6 @@ https://limitededt.in/products/nike-air-max-1-university-gold-black
 https://limitededt.in/products/air-max-270-thunder-grey
 https://limitededt.in/products/air-jordan-3-retro-night-stadium
 https://limitededt.in/products/950-bespoke-navy
-https://limitededt.in/products/new-era-apac-ess
-https://limitededt.in/products/new-era-mountains-white
 https://limitededt.in/products/dunk-low-se-white-iridescent
 https://limitededt.in/products/rs-x-efekt-prm-navy
 https://limitededt.in/products/rs-3-0-cordura
@@ -65,12 +63,7 @@ https://limitededt.in/products/xt-wings-2-black
 https://limitededt.in/products/xt-6-gore-tex-olive-night-dried-herb
 https://limitededt.in/products/acs-pro-metal-ghost-grey
 https://limitededt.in/products/limited-pu-basketball-navy
-https://limitededt.in/products/the-journal-volume-2
-https://limitededt.in/products/pokemon-tcg-rug-black-white
 https://limitededt.in/products/wipes-pack-of-24
-https://limitededt.in/products/fear-of-god-essentials-59fifty-closed-blue
-https://limitededt.in/products/fear-of-god-essentials-full-mesh-59fifty-closed-brown
-https://limitededt.in/products/fear-of-god-essentials-texas-rangers-59fifty
 https://limitededt.in/products/attack-game-royal
 https://limitededt.in/products/zoom-vomero-5-black-grey
 https://limitededt.in/products/air-foamposite-one-varsity-purple
@@ -86,7 +79,6 @@ https://limitededt.in/products/gel-lyte-iii-og-white-sage-cream
 https://limitededt.in/products/air-jordan-2-retro-python-gs
 https://limitededt.in/products/wmns-nike-air-max-1-87-flax-coconut-milk-sesame
 https://limitededt.in/products/580-urban-islander
-https://limitededt.in/products/urban-islander-chair
 https://limitededt.in/products/w-stan-smith-pf-owhite-green
 https://limitededt.in/products/w-stan-smith-pf-owhite-cblack
 https://limitededt.in/products/rivalry-low-cblack-ftwwht
@@ -195,16 +187,12 @@ https://limitededt.in/products/obey-yin-yang-panthers-blk
 https://limitededt.in/products/obey-ripped-icon-blk
 https://limitededt.in/products/obey-eyes-icon-2-jet
 https://limitededt.in/products/soft-fruits-woven-bls
-https://limitededt.in/products/jason-markk-rtu-foam-bottle
 https://limitededt.in/products/ex89
 https://limitededt.in/products/flower-plush-gold
-https://limitededt.in/products/flower-cushion-silver
 https://limitededt.in/products/flower-plush-silver
-https://limitededt.in/products/flower-cushion-black-gold
 https://limitededt.in/products/everyday-plus-cush-footie-white
 https://limitededt.in/products/lebron-witness-8-ep-cool-grey
 https://limitededt.in/products/field-general-82-light-volt
-https://limitededt.in/products/hikaru-flower-cushion-black-gold
 https://limitededt.in/products/samba-super-white
 https://limitededt.in/products/zoom-vomero-5-platinum-tint-metallic-gold
 https://limitededt.in/products/wmns-air-force-1-shadow-triple-white
@@ -214,7 +202,6 @@ https://limitededt.in/products/adilette-ayoon-slides-red-copy
 https://limitededt.in/products/wmns-v2k-run-khaki-metallic-silver
 https://limitededt.in/products/wmns-dunk-low-photon-dust-copy
 https://limitededt.in/products/wmns-air-max-90-aster-pink
-https://limitededt.in/products/wmns-everyday-plus-cushioned-footie-black
 https://limitededt.in/products/air-max-dn-safari
 https://limitededt.in/products/wmns-jordan-3-wnba-desert-camo
 https://limitededt.in/products/air-jordan-1-mid-se-copy
@@ -349,7 +336,6 @@ https://limitededt.in/products/gel-kayano-14-truffle-grey-oatmeal
 https://limitededt.in/products/wmns-air-force-1-07-triple-black
 https://limitededt.in/products/field-general-82-sp-black-sail-gum
 https://limitededt.in/products/air-max-flyknit-venture-vintage-green
-https://limitededt.in/products/insignia-sleevelesstee
 https://limitededt.in/products/gel-kinetic-fluent-steel-grey
 https://limitededt.in/products/wmns-samba-og-cloud-white-clear-orange-semi-coral
 https://limitededt.in/products/adilette-22-slides-silver-pebble-shadow-olive-off-white
@@ -716,7 +702,6 @@ https://limitededt.in/products/dunk-low-retro-se-ochre-black-olive-flak-coconut-
 https://limitededt.in/products/dunk-low-retro-se-wolf-grey-white-deep-royal-blue-sail
 https://limitededt.in/products/sonic-inhale-navy-team-royal
 https://limitededt.in/products/aesthetic-survival-book
-https://limitededt.in/products/the-journal-volume-3
 https://limitededt.in/products/storage-crate-white-clear
 https://limitededt.in/products/wmns-samba-og-cloud-white-silver-metallic-grey-one
 https://limitededt.in/products/wmns-handball-spezial-lucid-pink-collegiate-purple-almost-yellow
@@ -783,7 +768,6 @@ https://limitededt.in/products/japan-s-celadon-indigo-fog
 https://limitededt.in/products/all-pro-nitro-2-represent-24-7-vapor-gray-puma-black
 https://limitededt.in/products/louie-lopez-pro-2-blue-silver-black
 https://limitededt.in/products/one-star-95-egret-black-egret
-https://limitededt.in/products/all-star-classic-trainer-rugged-brown-natural-ivory
 https://limitededt.in/products/one-star-problack-black-black
 https://limitededt.in/products/chuck-70-black-black-egret
 https://limitededt.in/products/chuck-taylor-loblack-black-egret
@@ -857,6 +841,7 @@ https://limitededt.in/products/wmns-taekwondo-mei-elite-silver-metallic
 https://limitededt.in/products/wmns-tokyo-supplier-color-purple
 https://limitededt.in/products/mb-05-fast-furious-la-heat-fire-lux-lime
 https://limitededt.in/products/speedcat-metallic-black-warm-white
+https://limitededt.in/products/1906-black
 https://limitededt.in/products/1906-black-1
 https://limitededt.in/products/1906-castlerock-1
 https://limitededt.in/products/1906-nb-103-white
@@ -870,3 +855,9 @@ https://limitededt.in/products/rejuven8-run-wmns-dk-field-brown-bright-cactus
 https://limitededt.in/products/zoom-vomero-5-anthracite-black-chrome-flt-silver
 https://limitededt.in/products/la-france-fast-furious-mia-team-royal-silver
 https://limitededt.in/products/la-france-rnr-fast-furious-la-black-mango-yellow
+https://limitededt.in/products/adizero-evo-sl-silver-metallic-lucid-red-iron-metallic
+https://limitededt.in/products/adizero-evo-sl-woven-audi-revolut-f1-chalk-pearl-utility-black-high-res-red
+https://limitededt.in/products/wmns-adizero-evo-sl-cloud-white-core-black-cloud-white
+https://limitededt.in/products/wmns-samba-og-cloud-white-wonder-gold-met-grey-one
+https://limitededt.in/products/speedcat-black-white
+https://limitededt.in/products/speedcat-red-white

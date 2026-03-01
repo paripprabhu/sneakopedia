@@ -1,5 +1,5 @@
 # Superkicks footwear URLs — extracted from Shopify sitemap
-# 5475 sneaker/footwear products (filtered out 2564 non-shoe items)
+# 5441 sneaker/footwear products (filtered out 2598 non-shoe items)
 # To scrape: run sneaker_bot.py and paste 'superkicks_links.txt'
 
 https://www.superkicks.in/products/yung-96-black-white
@@ -287,7 +287,6 @@ https://www.superkicks.in/products/kenzo-minami-x-instapump-fury
 https://www.superkicks.in/products/ray-tracer-2
 https://www.superkicks.in/products/dmx6-mmi
 https://www.superkicks.in/products/future-rider
-https://www.superkicks.in/products/zoom-freak-1-oreo
 https://www.superkicks.in/products/superstar-ws-1
 https://www.superkicks.in/products/vans-era-floral
 https://www.superkicks.in/products/atmos-answer-5
@@ -1151,7 +1150,6 @@ https://www.superkicks.in/products/classic-legacy-az-albaster-chalk
 https://www.superkicks.in/products/disney-zx-8000
 https://www.superkicks.in/products/power-rangers-answer-iv
 https://www.superkicks.in/products/ozweego-celox-1
-https://www.superkicks.in/products/supernova-cushion-7
 https://www.superkicks.in/products/court-peak
 https://www.superkicks.in/products/eames-club-c-85-cloud-white
 https://www.superkicks.in/products/eames-club-c-85-modern-beige
@@ -1217,7 +1215,6 @@ https://www.superkicks.in/products/blazer-low-platform-pink-oxford-summit-white
 https://www.superkicks.in/products/lebron-19-white-university-red
 https://www.superkicks.in/products/la-casa-de-papel-f-s-hi
 https://www.superkicks.in/products/lebron-19-white-black-metallic-gold
-https://www.superkicks.in/products/dri-fit-kd-sleeveless-top-black-summit-white
 https://www.superkicks.in/products/m-ms-brand-forum-low-84-green-cloud-white
 https://www.superkicks.in/products/m-ms-brand-forum-low-84-dark-brown-cloud-white
 https://www.superkicks.in/products/m-ms-brand-forum-low-84-eqt-yellow-cloud-white
@@ -1303,7 +1300,6 @@ https://www.superkicks.in/products/victori-one-slides-magma-orange-black
 https://www.superkicks.in/products/air-pegasus-83-sail-light-chocolate
 https://www.superkicks.in/products/air-max-90-nrg-ashen-slate
 https://www.superkicks.in/products/jordan-why-not-5-pf-white-bright-crimson-black
-https://www.superkicks.in/products/sportwear-overshirt-phantom
 https://www.superkicks.in/products/air-max-90-nrg-light-bordeaux-armory-navy
 https://www.superkicks.in/products/trae-young-1-core-white-mint-rush
 https://www.superkicks.in/products/wmns-blazer-low-77-se-flower-embroidery
@@ -1628,7 +1624,6 @@ https://www.superkicks.in/products/wmns-air-force-1-07-se-etallic-gold-white-bla
 https://www.superkicks.in/products/wmns-air-jordan-1-mid-se-white-purple-smoke
 https://www.superkicks.in/products/wmns-adilette-thebe-magugu-slides-cloud-white-slides-for-women
 https://www.superkicks.in/products/echo-clog-desert-grass
-https://www.superkicks.in/products/ls-overshirt-orbit-gray
 https://www.superkicks.in/products/offcourt-se-black-dk-driftwood
 https://www.superkicks.in/products/wmns-air-force-1-07-lt-iron-ore-white
 https://www.superkicks.in/products/air-max-terrascape-90-moon-fossil-light-menta
@@ -2649,7 +2644,6 @@ https://www.superkicks.in/products/wmns-gazelle-indoor-pink-core-black-purple
 https://www.superkicks.in/products/crazy-iiinfinity-talc-core-black-pulse-olive
 https://www.superkicks.in/products/harden-vol-7-pulse-olive-core-black-talc-shoes-for-men
 https://www.superkicks.in/products/dunk-low-retro-white-black-summit-white
-https://www.superkicks.in/products/wmns-clam-slides-rugged-orange-rugged-orange-slides-for-women
 https://www.superkicks.in/products/cortez-white-black-lt-photo-blue-sail-shoes-for-men
 https://www.superkicks.in/products/cortez-midnight-navy-sail-noise-aqua-sail-shoes-for-men
 https://www.superkicks.in/products/wmns-offcourt-slides
@@ -2903,7 +2897,6 @@ https://www.superkicks.in/products/adilette-22-slides-wonder-clay-wild-sepia-cor
 https://www.superkicks.in/products/nmd_r1-core-black-carbon-grey-five-shoes-for-men
 https://www.superkicks.in/products/superstar-maroon-wonder-white-white-shoes-for-men
 https://www.superkicks.in/products/wmns-air-jordan-2-retro-low-white-university-red-black-coconut-milk-shoes
-https://www.superkicks.in/products/wmns-clam-slides-rugged-orange-rugged-orange
 https://www.superkicks.in/products/puma-x-perks-and-mini-suede-vtg-fresh-pear-shoes-for-men
 https://www.superkicks.in/products/mb-03-toxic-purple-glimmer-green-gecko
 https://www.superkicks.in/products/air-max-flyknit-racer-black-white-shoes-for-men
@@ -3010,7 +3003,6 @@ https://www.superkicks.in/products/blazer-low-77-jumbo-wntr-sail-pro-green-gum-m
 https://www.superkicks.in/products/kd16-nrg-ep-pink-foam-pink-white
 https://www.superkicks.in/products/zion-3-pf-white-university-red-cement-grey
 https://www.superkicks.in/products/wmns-air-force-1-wild-phantom-phantom-lt-orewood-brn-sneakers-for-women
-https://www.superkicks.in/products/wmns-air-force-1-wild-rugged-orange-black-shoes-for-women
 https://www.superkicks.in/products/wmns-hex-mule-celestial-gold-celestial-gold-slides-for-women
 https://www.superkicks.in/products/air-max-1-white-university-gold-black-shoes-for-men
 https://www.superkicks.in/products/dunk-low-retro-premium-cacao-wow-comet-blue-mars-stone-phantom-shoes-for-men
@@ -3063,7 +3055,6 @@ https://www.superkicks.in/products/air-max-1-premium-hyper-pink-sail-opti-yellow
 https://www.superkicks.in/products/freak-5-ep-black-white-pure-platinum-shoes-for-men
 https://www.superkicks.in/products/wmns-air-jordan-1-high-mm-black-game-royal-white-sail-sneakers-for-women
 https://www.superkicks.in/products/salehe-bembury-x-pollex-clog-yoke
-https://www.superkicks.in/products/wmns-air-force-1-07-white-rugged-orange
 https://www.superkicks.in/products/dunk-low-premium-midnight-navy-ale-brown-pale-ivory-shoes-for-men
 https://www.superkicks.in/products/wmns-air-jordan-1-mid-se-red-stardust-metallic-copper-white-sail
 https://www.superkicks.in/products/wmns-air-jordan-1-mid-pure-platinum-sky-j-mauve-sail
@@ -3246,7 +3237,6 @@ https://www.superkicks.in/products/adilette-22-orange-slides-for-men
 https://www.superkicks.in/products/adilette-22-green-slides-for-men
 https://www.superkicks.in/products/adilette-22-blue-bird-slides-for-men
 https://www.superkicks.in/products/rivalry-low-putty-mauve-ivory-women-sneakers-shoes
-https://www.superkicks.in/products/unstructured-5-panel-hatblue-grey-white
 https://www.superkicks.in/products/wmns-air-jordan-1-low-sail-yellow-ochre-pale-vanilla-white
 https://www.superkicks.in/products/cortez-se-sail-adobe-med-soft-pink-team-red-women-sneakers-shoes
 https://www.superkicks.in/products/zoom-vomero-5-shoes-for-men
@@ -3271,7 +3261,6 @@ https://www.superkicks.in/products/gel-1130-vanilla-white-sage-running-shoes-for
 https://www.superkicks.in/products/club-c-revenge-vintage-white-men-sneakers
 https://www.superkicks.in/products/air-jordan-1-low-og-white-sneakers-for-men
 https://www.superkicks.in/products/air-max-90-neutral-olive-black-sneakers-for-men
-https://www.superkicks.in/products/heavy-zip-overshirt-brown-check
 https://www.superkicks.in/products/bully-sneaker-balck-white
 https://www.superkicks.in/products/trae-young-3-off-white-red-core-black-shoe-for-men
 https://www.superkicks.in/products/harden-volume-8-cloud-white-core-black-charcol-sneakers-for-men
@@ -3725,8 +3714,6 @@ https://www.superkicks.in/products/pharrell-williams-basics-black
 https://www.superkicks.in/products/nike-everyday-lightweight-no-show-3-pairs-black-white
 https://www.superkicks.in/products/nike-air-max-90-prm-phantom-burgundy-crush-vintage-green
 https://www.superkicks.in/products/jordan-wmns-air-jordan-1-mid-se-coconut-milk-legend-pink-sail
-https://www.superkicks.in/products/nike-everyday-plus-cushioned-black-white
-https://www.superkicks.in/products/nike-everyday-plus-cushioned-white-black
 https://www.superkicks.in/products/jordan-air-jordan-1
 https://www.superkicks.in/products/adidas-originals-samba-og-cream-white-core-black-sand-strata
 https://www.superkicks.in/products/nike-air-force-1-07-white-midnight-navy-white
@@ -3738,7 +3725,6 @@ https://www.superkicks.in/products/nike-dunk-high-retro-se-phantom-racer-blue-pa
 https://www.superkicks.in/products/adidas-originals-mad-iiinfinity-core-black-red
 https://www.superkicks.in/products/adidas-originals-mad-iiinfinity-cwhite-subgrn-grey
 https://www.superkicks.in/products/jordan-max-aura-6-black-black-anthracite
-https://www.superkicks.in/products/jordan-sport-dri-fit-sleeveless-top-black-white
 https://www.superkicks.in/products/nike-air-zoom-spiridon-cage-2-lt-smoke-grey-metallic-silver
 https://www.superkicks.in/products/nike-killshot-2-black-black-phantom
 https://www.superkicks.in/products/nike-wmns-p-6000-light-bone-platinum-violet-cement-grey
@@ -3817,7 +3803,6 @@ https://www.superkicks.in/products/wmns-air-jordan-1-retro-high-og-first-flight-
 https://www.superkicks.in/products/jordan-max-aura-6-white-metallic-gold-black
 https://www.superkicks.in/products/nike-air-more-uptempo-96-white-midnight-navy-metallic-gold
 https://www.superkicks.in/products/jordan-air-jordan-6-retro-pearl
-https://www.superkicks.in/products/represent-embroidered-initial-overshirt-washed-taupe
 https://www.superkicks.in/products/represent-r3c-v2-colour-block-carpenter-denim-blue
 https://www.superkicks.in/products/billionaire-boys-club-bb-small-arch-ss-knit-black
 https://www.superkicks.in/products/billionaire-boys-club-bb-astro-rover-ss-knit-maritime
@@ -3871,17 +3856,7 @@ https://www.superkicks.in/products/nike-wmns-dunk-low-premium-white-photo-blue-p
 https://www.superkicks.in/products/jordan-paris-saint-germain-jumpman-slides-off-noir-infrared-23-pink-oxford
 https://www.superkicks.in/products/nike-intiator-light-bone-cargo-khaki-limestone
 https://www.superkicks.in/products/nike-wmns-cortez-leather-summit-white-light-silver-sail
-https://www.superkicks.in/products/new-era-team-colour-mlb-9fifty-chiwhico-blk
-https://www.superkicks.in/products/new-era-team-colour-mlb-9fifty-losdodco-dry
-https://www.superkicks.in/products/new-era-team-colour-mlb-9fifty-oakathco-dkg
-https://www.superkicks.in/products/new-era-9fifty-stretch-snap-losdodco-blk
-https://www.superkicks.in/products/new-era-wb-trucker-looney-blk
-https://www.superkicks.in/products/new-era-nba-team-colour-trucker-loslak-trpyel
 https://www.superkicks.in/products/jordan-air-jordan-4-retro-se-wet-cement
-https://www.superkicks.in/products/new-era-nba-team-colour-trucker-phosun-grhorg
-https://www.superkicks.in/products/new-era-mlb-flame-trucker-losdod-grh
-https://www.superkicks.in/products/new-era-graphic-print-trucker-newera-blk
-https://www.superkicks.in/products/new-era-graphic-print-trucker-newera-ltc
 https://www.superkicks.in/products/adidas-adilette-lite-black-gold
 https://www.superkicks.in/products/adidas-originals-adilette-lite-wonder-mauve-gold
 https://www.superkicks.in/products/adidas-originals-adilette-blue-cloud-white
@@ -3982,7 +3957,6 @@ https://www.superkicks.in/products/jordan-luka-3-pf-motorsport-white-metallic-go
 https://www.superkicks.in/products/jordan-flight-essentials-85-white
 https://www.superkicks.in/products/icecream-style-facts-l-s-knit-black
 https://www.superkicks.in/products/icecream-boys-club-key-keys-open-doors-gold
-https://www.superkicks.in/products/y-3-washed-twill-overshirt-black
 https://www.superkicks.in/products/adidas-originals-wmns-campus-00s-wonder-quartz-off-white
 https://www.superkicks.in/products/adidas-originals-wmns-campus-00s-white-core-black-off-white
 https://www.superkicks.in/products/adidas-originals-samba-xlg-black-white-gum
@@ -4622,7 +4596,6 @@ https://www.superkicks.in/products/adidas-drop-step-low-2-0-w-ikd-alumina-halo-i
 https://www.superkicks.in/products/nike-air-max-90-sanddrift-black-aurora-green-khaki
 https://www.superkicks.in/products/nike-air-max-90-lt-khaki-black-magic-ember-mink-brown
 https://www.superkicks.in/products/nike-killshot-2-leather-royal-tint-team-red-gum-med-brown-white
-https://www.superkicks.in/products/superkicks-denim-overshirt-blue
 https://www.superkicks.in/products/superkicks-crop-top-navy-blue
 https://www.superkicks.in/products/superkicks-crop-top-light-blue
 https://www.superkicks.in/products/jordan-air-jordan-1-low-white-midnight-navy-neutral-grey
@@ -5049,7 +5022,6 @@ https://www.superkicks.in/products/adidas-originals-jabbar-lo-purple-white
 https://www.superkicks.in/products/puma-palermo-moda-la-catrina-dia-de-muertos-multi
 https://www.superkicks.in/products/puma-speedcat-og-orange-glo-poised-pink
 https://www.superkicks.in/products/puma-speedcat-pearlized-ballet-white
-https://www.superkicks.in/products/adidas-originals-firebird-utility-jorts-stone-khaki
 https://www.superkicks.in/products/adidas-originals-handball-spezial-ash-blue-silver-metallic-orbit-grey
 https://www.superkicks.in/products/adidas-originals-forum-low-cl-off-white-halo-blue-off-white
 https://www.superkicks.in/products/converse-chuck-taylor-all-star-lugged-heel-platform-grey
@@ -5167,7 +5139,6 @@ https://www.superkicks.in/products/adidas-drop-step-low-2-0-ikd-core-white-silve
 https://www.superkicks.in/products/adidas-drop-step-low-2-0-ikd-violet-aurora-black-grey-three
 https://www.superkicks.in/products/new-balance-740-dark-olivine-silver-metallic
 https://www.superkicks.in/products/adidas-originals-miaou-tights-navy
-https://www.superkicks.in/products/adidas-originals-miaou-handbag-hazy-yellow
 https://www.superkicks.in/products/adidas-originals-elite-mei-miaou-slip-on-silver-metallic-navy-hazy-yellow
 https://www.superkicks.in/products/adidas-originals-samba-og-aurora-core-black-silver-metallic
 https://www.superkicks.in/products/nike-air-max-plus-black-black-black-copy
@@ -5203,7 +5174,6 @@ https://www.superkicks.in/products/adidas-originals-chavarria-forum-84-black
 https://www.superkicks.in/products/adidas-originals-chavarria-jabbar-low-core-black
 https://www.superkicks.in/products/adidas-originals-x-chavarria-jabbar-low-core-black-core-black-supplier-colour
 https://www.superkicks.in/products/adidas-originals-x-chavarria-jabbar-low-legend-ink-off-white-cream-white
-https://www.superkicks.in/products/almost-gods-military-overshirt-olive
 https://www.superkicks.in/products/jordan-air-jordan-1-low-gym-red-black-white
 https://www.superkicks.in/products/jordan-air-jordan-1-mid-black-black-gym-red
 https://www.superkicks.in/products/nike-air-max-90-wolf-grey-wolf-grey-wolf-grey-black
@@ -5250,7 +5220,6 @@ https://www.superkicks.in/products/converse-cl98-beige
 https://www.superkicks.in/products/converse-cl98-navy
 https://www.superkicks.in/products/converse-chuck-70-black-darkly-jaded-egret
 https://www.superkicks.in/products/converse-chuck-70-beige
-https://www.superkicks.in/products/universal-works-japanese-patchwork-l-s-tech-overshirt-navy
 https://www.superkicks.in/products/converse-cons-louie-lopez-pro-2-suede-beige
 https://www.superkicks.in/products/converse-all-star-classic-trainer-suede-blue
 https://www.superkicks.in/products/converse-chuck-70-green-2
@@ -5311,9 +5280,7 @@ https://www.superkicks.in/products/converse-chuck-70-de-luxe-pointed-black
 https://www.superkicks.in/products/adidas-adizero-evo-sl-off-white-maroon-mystery-red
 https://www.superkicks.in/products/adidas-adizero-evo-sl-green-aurora-plum
 https://www.superkicks.in/products/adidas-adizero-evo-sl-silver-metallic-lucid-red-iron-metallic
-https://www.superkicks.in/products/y-3-ut-aop-overshirt-multi
 https://www.superkicks.in/products/aries-premium-faded-temple-bomber-black
-https://www.superkicks.in/products/aries-mini-carabiner-chain-necklace-silver
 https://www.superkicks.in/products/nike-air-force-1-07-nn-white-italy-blue-sail-team-orange
 https://www.superkicks.in/products/nike-air-force-1-retro-valentines-day-black-black-university-red
 https://www.superkicks.in/products/nike-air-force-1-retro-valentines-day-university-red-university-red-black
@@ -5350,7 +5317,6 @@ https://www.superkicks.in/products/asics-gel-nyc-2-0-sshs-mahogany-black
 https://www.superkicks.in/products/converse-all-star-classic-trainer-retro-smoked-paprika-white-gum
 https://www.superkicks.in/products/converse-chuck-taylor-lo-egret-egret-black
 https://www.superkicks.in/products/converse-chuck-taylor-lo-black-black-egret
-https://www.superkicks.in/products/converse-all-star-classic-trainer-suede-rugged-brown-natural-ivory
 https://www.superkicks.in/products/converse-all-star-classic-trainer-suede-thyme-again-lizard-breath
 https://www.superkicks.in/products/converse-chuck-taylor-lo-red-new-found-bloom-egret
 https://www.superkicks.in/products/converse-chuck-taylor-all-star-hearts-vintage-white-egret-days-ahead
