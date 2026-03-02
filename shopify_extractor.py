@@ -57,6 +57,7 @@ _NON_SHOE_EXACT = {
     "sweatpant", "sweatpants", "sweatshort", "sweatshorts",
     "short", "shorts", "jeans", "trouser", "trousers",
     "trackpant", "trackpants", "chino", "chinos",
+    "cargos",                          # cargo pants plural (CDC: oddnoteven-*-cargos)
     # sets / outerwear
     "tracksuit", "tracksuits",
     "jacket", "jackets", "windbreaker", "anorak", "coat", "parka", "raincoat",
@@ -65,6 +66,9 @@ _NON_SHOE_EXACT = {
     # headwear
     "cap", "caps", "hat", "hats", "beanie", "beanies", "bonnet",
     "headband", "bucket",
+    "5950",                            # New Era fitted cap model (LimitedEdt)
+    "strapback",                       # strapback caps
+    "trucker",                         # trucker caps and trucker jackets
     # accessories
     "bag", "bags", "backpack", "tote", "pouch", "wallet", "purse",
     "keychain", "keyring", "lanyard", "belt", "belts",
@@ -105,6 +109,7 @@ _NON_SHOE_SUBSTR = (
     # caps / headwear
     "-cap-", "-cap", "bucket-hat", "trucker-cap", "dad-cap", "snapback",
     "-beanie", "five-panel",
+    "cargo-type",                      # CDC cargo pants pattern: cargo-type-1, cargo-type-2...
     # laces / insoles
     "shoelace", "flat-lace", "-lace-", "-laces-", "-insole",
     # bags
@@ -121,8 +126,8 @@ _NON_SHOE_SUBSTR = (
     "sweat-short", "running-short", "sweatshort",
     "trouser", "jersey", "jerseyfan", "-jersey-", "football-jersey", "football-scarf",
     "one-piece", "bodysuit",
-    # collectibles
-    "blind-box", "bearbrick", "bear-brick", "kaws",
+    # collectibles (bearbrick included intentionally — sold at sneaker stores)
+    "blind-box", "kaws",
     # Nike/Adidas internal apparel item codes
     "as-m-", "as-w-", "as-lbj-", "as-kd-",
     "nk-heritage-", "nk-club-", "nk-nsw-",

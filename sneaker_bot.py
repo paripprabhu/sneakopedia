@@ -74,8 +74,9 @@ def _strip_style_codes(name: str) -> str:
     Also cleans up an orphaned 3-digit suffix left by letters-first codes (e.g. " 100").
     """
     s = name
-    s = re.sub(r'\b[A-Za-z]{0,3}\d{4,6}(?:-\d{3})?\b', '', s)  # Nike/Adidas: Dd8959-100
-    s = re.sub(r'\b\d{4,6}[A-Za-z]{1,2}\b', '', s)               # Converse: 162053c
+    s = re.sub(r'\b[A-Za-z]{1,3}\d{4,6}(?:-\d{3})?\b', '', s)  # Nike/Adidas: Dd8959-100 (≥1 letter required)
+    s = re.sub(r'\b\d{4,6}-\d{3}\b', '', s)                      # pure digit-dash: 555088-101
+    s = re.sub(r'\b\d{5,6}[A-Za-z]{1,2}\b', '', s)               # Converse: 162053c (5+ digits keeps NB 2002R/1906D)
     s = re.sub(r'\s\d{3}\b', '', s)                               # orphan: " 100"
     return re.sub(r'\s+', ' ', s).strip()
 
@@ -116,8 +117,13 @@ def normalize_canonical(name: str) -> str:
     s = s.lower()
     for pat in _BRAND_PREFIXES:
         s = re.sub(pat, '', s, count=1)
-    # Strip style codes like DH7138-006, FZ5112, 555088-101
-    s = re.sub(r'\b[a-z]{0,3}\d{4,6}(?:-\d{3})?\b', '', s)
+    # Strip style codes like DH7138-006, FZ5112 (require ≥1 letter so NB model
+    # numbers like 1000/9060/2002 are NOT stripped — they have no letter prefix)
+    s = re.sub(r'\b[a-z]{1,3}\d{4,6}(?:-\d{3})?\b', '', s)
+    # Also strip pure digit-dash codes like 555088-101
+    s = re.sub(r'\b\d{4,6}-\d{3}\b', '', s)
+    # Digits-first codes like 162053c (Converse) — 5+ digits to preserve NB 2002R/1906D
+    s = re.sub(r'\b\d{5,6}[a-z]{1,2}\b', '', s)
     s = re.sub(r'\([^)]*\)', '', s)   # strip (2015), (W)
     s = re.sub(r'\[[^\]]*\]', '', s)  # strip [restock]
     s = s.replace("'", '').replace('"', '')
