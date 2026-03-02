@@ -555,6 +555,11 @@ def scrape_single_product(driver, url):
         if '/products/' in url:
             raw_slug = url.split('/products/')[-1].split('?')[0]
             slug_name = slug_to_name(raw_slug)
+            # Strip style codes baked into slugs (e.g. "Dd8959", "B75806")
+            # and any orphaned 3-digit suffix left behind (e.g. " 100" from "-dd8959-100")
+            slug_name = re.sub(r'\b[A-Za-z]{0,3}\d{4,6}\b', '', slug_name)
+            slug_name = re.sub(r'\s\d{3}\b', '', slug_name)
+            slug_name = re.sub(r'\s+', ' ', slug_name).strip()
             if len(slug_name) > len(name) + 10:
                 name = slug_name
 
