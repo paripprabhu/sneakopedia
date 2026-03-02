@@ -49,6 +49,44 @@ _BRAND_PREFIXES = [
     r'^salomon\s+', r'^ugg\s+',
 ]
 
+# Slug compound-word splitter — VNV (and some headless Shopify stores) join
+# the two halves of a colorway without a separator in the URL slug.
+# e.g. "For All Time Red/Puma White" → slug token "redpuma" or "pinkpuma".
+# We split these back so the display name and canonical both look correct.
+# Sorted longest-first so longer terms match before their substrings do.
+_SLUG_SPLIT_TERMS = sorted([
+    # Brand names that appear as colorway suffixes (e.g. "Red/Puma White")
+    'puma', 'nike', 'adidas', 'jordan', 'vans', 'new',
+    # Common colorway words
+    'white', 'black', 'red', 'blue', 'green', 'grey', 'gray',
+    'beige', 'cream', 'brown', 'yellow', 'orange', 'purple', 'pink',
+    'gold', 'silver', 'olive', 'navy', 'teal', 'coral', 'rose',
+    'mauve', 'mist', 'chalk', 'sand', 'smoke', 'ash', 'fog',
+    'gum', 'clay', 'lime', 'mint', 'plum', 'tan',
+], key=len, reverse=True)
+
+
+def _decompound_slug_token(word: str) -> str:
+    """Split a single slug token that joins two colorway words without a separator.
+    'redpuma' → 'Red/Puma',  'pinkpuma' → 'Pink/Puma',  'blackmauve' → 'Black/Mauve'
+    Regular tokens like 'speedcat' or 'white' are returned title-cased unchanged.
+    """
+    w = word.lower()
+    for term in _SLUG_SPLIT_TERMS:
+        if w.endswith(term) and len(w) > len(term) + 1:
+            prefix = w[:-len(term)]
+            if len(prefix) >= 2:
+                return prefix.capitalize() + '/' + term.capitalize()
+    return word.capitalize()
+
+
+def slug_to_name(slug: str) -> str:
+    """Convert a /products/ URL slug to a clean display name, repairing compound tokens.
+    'puma-speedcat-plus-puma-redpuma-white' → 'Puma Speedcat Plus Puma Red/Puma White'
+    """
+    return ' '.join(_decompound_slug_token(p) for p in slug.split('-'))
+
+
 _DOMAIN_TO_RETAILER = {
     'crepdogcrew.com':              'Crepdog Crew',
     'marketplace.mainstreet.co.in': 'Mainstreet',
@@ -516,7 +554,7 @@ def scrape_single_product(driver, url):
         # gets its own canonical ID rather than all collapsing into one document.
         if '/products/' in url:
             raw_slug = url.split('/products/')[-1].split('?')[0]
-            slug_name = raw_slug.replace('-', ' ').title()
+            slug_name = slug_to_name(raw_slug)
             if len(slug_name) > len(name) + 10:
                 name = slug_name
 
