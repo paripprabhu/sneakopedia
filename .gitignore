@@ -37,6 +37,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Scraper output — generated data, not source code
+sneaker_dump.txt
+
+# Claude Code internal files
+.claude/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
