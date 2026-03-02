@@ -1,14 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
-// ---------- In-memory rate limiter (per IP, sliding window) ----------
-// This works on a single Vercel serverless instance. For multi-instance
-// deployments, swap this for Upstash Redis or similar.
-const WINDOW_MS  = 60_000; // 1 minute window
-const MAX_REQUESTS = 120;  // max requests per window per IP
+// ---------- Rate limiter (per IP, sliding window) ----------
+// ⚠️  In-memory: works on a single Vercel instance. For high-traffic production,
+//     swap for Upstash Redis (@upstash/ratelimit) — same API, persistent across instances.
+const WINDOW_MS    = 60_000;  // 1-minute sliding window
+const MAX_REQUESTS = 30;      // max API calls per IP per window
 
 const hits = new Map<string, { count: number; resetAt: number }>();
 
-// Cleanup stale entries every 5 minutes to prevent memory leak
 let lastCleanup = Date.now();
 function cleanup() {
   const now = Date.now();
@@ -21,25 +20,37 @@ function cleanup() {
 
 function isRateLimited(ip: string): boolean {
   cleanup();
-  const now = Date.now();
+  const now   = Date.now();
   const entry = hits.get(ip);
-
   if (!entry || now > entry.resetAt) {
     hits.set(ip, { count: 1, resetAt: now + WINDOW_MS });
     return false;
   }
-
   entry.count++;
   return entry.count > MAX_REQUESTS;
 }
 
+// ---------- CORS ----------
+// Requests with NO Origin header (server-side fetches, curl, same-origin browser) are
+// always allowed. Browser cross-origin requests are only allowed from the app's own domain.
+// Set APP_ORIGIN in .env.local (and Vercel env) to your production URL.
+const APP_ORIGIN = process.env.APP_ORIGIN ?? '';  // e.g. "https://sneakopedia.com"
+
+function isOriginAllowed(origin: string | null): boolean {
+  if (!origin) return true;  // no Origin = server-side request or same-origin — allow
+  if (APP_ORIGIN && origin === APP_ORIGIN) return true;
+  // Always allow localhost for local development
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return true;
+  return false;
+}
+
 // ---------- Security headers ----------
-const securityHeaders: Record<string, string> = {
-  'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options':        'DENY',
-  'X-XSS-Protection':       '1; mode=block',
-  'Referrer-Policy':         'strict-origin-when-cross-origin',
-  'Permissions-Policy':      'camera=(), microphone=(), geolocation=()',
+const SECURITY_HEADERS: Record<string, string> = {
+  'X-Content-Type-Options':    'nosniff',
+  'X-Frame-Options':           'DENY',
+  'X-XSS-Protection':          '1; mode=block',
+  'Referrer-Policy':           'strict-origin-when-cross-origin',
+  'Permissions-Policy':        'camera=(), microphone=(), geolocation=()',
   'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
 };
 
@@ -48,8 +59,19 @@ export function middleware(request: NextRequest) {
            || request.headers.get('x-real-ip')
            || '127.0.0.1';
 
-  // Rate limit API routes
-  if (request.nextUrl.pathname.startsWith('/api/')) {
+  const isApi = request.nextUrl.pathname.startsWith('/api/');
+
+  if (isApi) {
+    // 1. Block cross-origin browser requests from unknown domains
+    const origin = request.headers.get('origin');
+    if (!isOriginAllowed(origin)) {
+      return NextResponse.json(
+        { error: 'Forbidden.' },
+        { status: 403 }
+      );
+    }
+
+    // 2. Rate limit
     if (isRateLimited(ip)) {
       return NextResponse.json(
         { error: 'Too many requests. Please slow down.' },
@@ -58,10 +80,22 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Add security headers to all responses
   const response = NextResponse.next();
-  for (const [key, value] of Object.entries(securityHeaders)) {
+
+  // Security headers on all routes
+  for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
     response.headers.set(key, value);
+  }
+
+  // CORS headers on API routes — echo back allowed origin so CDN can vary correctly
+  if (isApi) {
+    const origin = request.headers.get('origin');
+    if (origin && isOriginAllowed(origin)) {
+      response.headers.set('Access-Control-Allow-Origin',  origin);
+      response.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+      response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+      response.headers.set('Vary', 'Origin');
+    }
   }
 
   return response;

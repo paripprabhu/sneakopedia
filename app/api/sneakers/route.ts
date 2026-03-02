@@ -83,7 +83,7 @@ export async function GET(request: Request) {
     const brandsParam = searchParams.get('brands') || searchParams.get('brand');
 
     // --- VALIDATE & CLAMP ---
-    const page     = Math.max(1, Math.min(isNaN(rawPage) ? 1 : rawPage, 500));
+    const page     = Math.max(1, Math.min(isNaN(rawPage) ? 1 : rawPage, 50));  // cap: 50 pages × 24 = 1,200 items max per session
     const priceMin = Math.max(0, isNaN(rawPriceMin) ? 0 : rawPriceMin);
     const validSort = VALID_SORTS.has(sort) ? sort : 'none';
 
@@ -166,7 +166,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json(
       { data: paginatedData, pagination: { totalPages, totalItems, currentPage: page } },
-      { headers: { 'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=60' } }
+      { headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' } }
     );
   } catch (err) {
     console.error('[API /sneakers] Error:', err);
