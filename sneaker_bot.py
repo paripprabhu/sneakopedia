@@ -633,6 +633,9 @@ def main():
     print("   SNEAKOPEDIA: HYBRID BOT V9.2")
     print("==========================================")
     print("   Tip: paste a .txt filename to scrape a list of URLs in batch.")
+    print("        file.txt          → scrape all")
+    print("        file.txt:50       → first 50 URLs")
+    print("        file.txt:pg 3:20  → page 3 at 20 per page (lines 41–60)")
 
     driver = setup_driver()
 
@@ -648,15 +651,46 @@ def main():
         results = []
 
         # --- DECISION LOGIC ---
-        if url.endswith(".txt"):
-            # Batch file mode — each line is a product URL
+        if ".txt" in url.split(":")[0] or url.endswith(".txt"):
+            # Batch file mode — supports optional slice syntax:
+            #   file.txt              → all URLs
+            #   file.txt:50           → first 50 URLs
+            #   file.txt:pg 3:20      → page 3 at 20 per page (lines 41–60)
+            parts = url.split(":", 1)
+            filepath = parts[0].strip()
+            slice_spec = parts[1].strip() if len(parts) > 1 else ""
+
             try:
-                with open(url, "r", encoding="utf-8") as f:
-                    batch_urls = [l.strip() for l in f if l.strip() and not l.startswith("#")]
-                results = scrape_url_list(driver, batch_urls)
+                with open(filepath, "r", encoding="utf-8") as f:
+                    all_urls = [l.strip() for l in f if l.strip() and not l.startswith("#")]
             except FileNotFoundError:
-                print(f"   ❌ File not found: {url}")
+                print(f"   ❌ File not found: {filepath}")
                 continue
+
+            total = len(all_urls)
+
+            if not slice_spec:
+                # No slice — scrape everything
+                batch_urls = all_urls
+            else:
+                pg_match = re.match(r'pg\s*(\d+)\s*:\s*(\d+)', slice_spec, re.IGNORECASE)
+                if pg_match:
+                    page_num  = int(pg_match.group(1))
+                    per_page  = int(pg_match.group(2))
+                    start     = (page_num - 1) * per_page
+                    end       = start + per_page
+                    batch_urls = all_urls[start:end]
+                    print(f"   📄 Page {page_num} of {per_page}/pg  →  lines {start+1}–{min(end, total)} of {total} total")
+                elif slice_spec.isdigit():
+                    # Simple limit: first N URLs
+                    n = int(slice_spec)
+                    batch_urls = all_urls[:n]
+                    print(f"   📄 First {n} of {total} URLs")
+                else:
+                    print(f"   ❌ Unrecognised slice: '{slice_spec}'  (use  file.txt:50  or  file.txt:pg 3:20)")
+                    continue
+
+            results = scrape_url_list(driver, batch_urls)
         elif "/collections/" in url or "/search" in url:
             results = scrape_collection(driver, url)
         else:
