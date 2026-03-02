@@ -66,6 +66,20 @@ _SLUG_SPLIT_TERMS = sorted([
 ], key=len, reverse=True)
 
 
+def _strip_style_codes(name: str) -> str:
+    """Remove retailer style codes from a display name.
+    Handles both formats:
+      letters-first: Dd8959, B75806, FZ5112, CW7891-001
+      digits-first:  162053c, 162056c  (Converse format)
+    Also cleans up an orphaned 3-digit suffix left by letters-first codes (e.g. " 100").
+    """
+    s = name
+    s = re.sub(r'\b[A-Za-z]{0,3}\d{4,6}(?:-\d{3})?\b', '', s)  # Nike/Adidas: Dd8959-100
+    s = re.sub(r'\b\d{4,6}[A-Za-z]{1,2}\b', '', s)               # Converse: 162053c
+    s = re.sub(r'\s\d{3}\b', '', s)                               # orphan: " 100"
+    return re.sub(r'\s+', ' ', s).strip()
+
+
 def _decompound_slug_token(word: str) -> str:
     """Split a single slug token that joins two colorway words without a separator.
     'redpuma' → 'Red/Puma',  'pinkpuma' → 'Pink/Puma',  'blackmauve' → 'Black/Mauve'
@@ -555,13 +569,13 @@ def scrape_single_product(driver, url):
         if '/products/' in url:
             raw_slug = url.split('/products/')[-1].split('?')[0]
             slug_name = slug_to_name(raw_slug)
-            # Strip style codes baked into slugs (e.g. "Dd8959", "B75806")
-            # and any orphaned 3-digit suffix left behind (e.g. " 100" from "-dd8959-100")
-            slug_name = re.sub(r'\b[A-Za-z]{0,3}\d{4,6}\b', '', slug_name)
-            slug_name = re.sub(r'\s\d{3}\b', '', slug_name)
-            slug_name = re.sub(r'\s+', ' ', slug_name).strip()
+            slug_name = _strip_style_codes(slug_name)
             if len(slug_name) > len(name) + 10:
                 name = slug_name
+
+        # Strip style codes from the final display name regardless of source
+        # (some retailers include codes like "162053c" or "Dd8959" in og:title)
+        name = _strip_style_codes(name)
 
         # --- IMAGE (Meta Strategy) ---
         img_src = gtm.get('image', "")
