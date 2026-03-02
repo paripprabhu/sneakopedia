@@ -509,6 +509,17 @@ def scrape_single_product(driver, url):
         name  = gtm.get('name') or extract_name(driver)
         price = gtm.get('price') or extract_price(driver)
 
+        # --- SLUG ENRICHMENT ---
+        # VNV (and some custom Shopify frontends) only put the silhouette in og:title/GTM
+        # (e.g. "SPEEDCAT PLUS") — the colorway lives only in the URL slug.
+        # If the slug-derived name is meaningfully longer, use it so every colorway
+        # gets its own canonical ID rather than all collapsing into one document.
+        if '/products/' in url:
+            raw_slug = url.split('/products/')[-1].split('?')[0]
+            slug_name = raw_slug.replace('-', ' ').title()
+            if len(slug_name) > len(name) + 10:
+                name = slug_name
+
         # --- IMAGE (Meta Strategy) ---
         img_src = gtm.get('image', "")
         if not img_src:
